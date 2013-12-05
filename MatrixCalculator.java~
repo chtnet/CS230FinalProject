@@ -1,0 +1,11 @@
+public class MatrixCalculator {
+ private Matrix matrix;
+ 
+ public MatrixCalculator(int m, int n)
+ {
+   matrix = new Matrix(m,n);
+   
+   
+ }
+  
+}
