@@ -21,12 +21,13 @@ public class Matrix
   }
   
   //clones matrix
-  public int[][] clone()
+  public Matrix clone()
   {
-    int[][] temp = matrix;
+ 
+   Matrix temp = new Matrix(matrix.length, matrix[0].length);
    for(int i = 0; i < matrix.length; i++) {
      for (int j = 0; i < matrix[0].length; j++)
-       temp[i][j] = matrix[i][j];
+       temp.matrix[i][j] = matrix[i][j];
    }
    return temp;
   }
@@ -42,11 +43,11 @@ public class Matrix
   }
   
   //transposes matrix 
-  public int[][] transposeMatrix() {
-   int[][] transpose = clone();
+  public Matrix transpose() {
+   Matrix transpose = clone();
     for(int i = 0; i < matrix.length; i++) {
      for(int j = 0; j < matrix[0].length; j++)
-       matrix[i][j] = matrix[j][i];
+       transpose.matrix[i][j] = matrix[j][i];
     }
     return transpose;
   }

@@ -1,14 +1,14 @@
 import java.awt.*;
 import javax.swing.*;
 
-public class TermsPanel extends JPanel
+public class IntroPanel extends JPanel
 {
    //-----------------------------------------------------------------
    //  Sets up this panel with two labels.
    //-----------------------------------------------------------------
-   public TermsPanel()
+   public IntroPanel()
    {
-      //setBackground (Color.blue);
+      setBackground (Color.blue);
 
       JLabel l1 = new JLabel ("Matrix Calculator");
       JLabel l2 = new JLabel ("This is how our program works.");
