@@ -9,17 +9,17 @@ public class CalculatorPanel extends JPanel
   private JComboBox m, n, calculation;
   private JButton enter, calculate;
   private int mValue, nValue;
-  private JPanel matrixPanel;
+  private JPanel matrixPanel, settingsPanel;
   private MatrixCalculator mc;
-   //-----------------------------------------------------------------
-   //  Sets up this panel with two labels.
-   //-----------------------------------------------------------------
-   public CalculatorPanel()
-   {
-     
-     
-      setBackground (Color.blue);
-
+  //-----------------------------------------------------------------
+  //  Sets up this panel with two labels.
+  //-----------------------------------------------------------------
+  public CalculatorPanel()
+  {
+    
+    setLayout (new BorderLayout());
+    //setBackground (Color.blue);
+    
     //String info for combo boxes
     String[] items = new String [6];
     items [0] = "---";
@@ -30,6 +30,8 @@ public class CalculatorPanel extends JPanel
     items [5] = "5";
     m = new JComboBox (items);  
     n = new JComboBox (items);
+    m.setPreferredSize(new Dimension(10,20));
+    n.setPreferredSize(new Dimension(10,20));
     
     String[] items2 = new String[5];
     items2[0] = "---";
@@ -38,13 +40,28 @@ public class CalculatorPanel extends JPanel
     items2[3] = "Inverse";
     items2[4] = "Determinant";
     
+    calculation = new JComboBox(items2);
     matrixPanel = new JPanel();
+    settingsPanel = new JPanel();
     enter = new JButton("Enter");
     calculate = new JButton("Calculate");
     
-   }
-   
-    private class ButtonListener implements ActionListener {
+    settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
+    settingsPanel.add(new JLabel("Number of rows:"));
+    settingsPanel.add(m);
+    settingsPanel.add(new JLabel("Number of columns:"));
+    settingsPanel.add(n);
+    settingsPanel.add(calculation);
+    settingsPanel.add(calculate);
+
+    
+    add (matrixPanel, BorderLayout.CENTER);
+    add (settingsPanel, BorderLayout.WEST);
+  
+    
+  }
+  
+  private class ButtonListener implements ActionListener {
     
     public void actionPerformed (ActionEvent event) {
       
@@ -58,8 +75,8 @@ public class CalculatorPanel extends JPanel
         mValue = Integer.valueOf((String)m.getSelectedItem());
         nValue = Integer.valueOf((String)n.getSelectedItem());
         mc = new MatrixCalculator(mValue, nValue);
-
+        
+      }
     }
   }
-}
 }

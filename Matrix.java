@@ -11,15 +11,21 @@ public class Matrix
 {
   
   private double[][] matrix;
+  private int rowCount;
+  private int columnCount;
   
   //constructor 1 - takes in no parameters
   public Matrix() {
     matrix = new double[2][2];
+    rowCount = 2;
+    columnCount = 2;
   }
   
   //constructor 2 - takes in two parameters, m and n
   public Matrix(int m, int n) {
     matrix = new double[m][n];
+    rowCount = m;
+    columnCount = n;
   }
   
   //clones matrix
@@ -44,6 +50,16 @@ public class Matrix
     matrix[i][j] = k; 
   }
   
+  //gets row count 
+  public int getRowCount() {
+    return rowCount;
+  }
+  
+  //gets column count
+  public int getColumnCount() {
+    return columnCount;
+  }
+  
   // helper method that returns matrix
   public double[][] getMatrix() {
     return this.matrix; 
@@ -51,9 +67,9 @@ public class Matrix
   
   //transposes matrix 
   public Matrix transpose() {
-    Matrix transpose = clone();
-    for(int i = 0; i < matrix.length; i++) {
-      for(int j = 0; j < matrix[0].length; j++)
+    Matrix transpose = new Matrix(matrix[0].length, matrix.length);
+    for(int i = 0; i < matrix[0].length; i++) {
+      for(int j = 0; j < matrix.length; j++)
         transpose.matrix[i][j] = matrix[j][i];
     }
     return transpose;
@@ -66,8 +82,10 @@ public class Matrix
         matrix[i][j] = matrix[i+1][j]; 
     }
     for(int j = 0; j < matrix[0].length; j++) {
-      matrix[matrix.length-1][j] = Integer.MIN_VALUE;
+      matrix[matrix.length-1][j] = 0;
     }
+    rowCount--;
+     
   }
   
   // swaps rows of a matrix
@@ -123,7 +141,13 @@ public class Matrix
     return true;
   }
   
-   // checks if column is zeroes
+  public void removeRowZeroes() {
+    for(int i = 0; i < matrix[0].length; i++) { 
+      if(isRowZeroes(i)) removeRow(i);
+    }
+  }
+  
+  // checks if column is zeroes
   public boolean isColumnZeroes(int m) {
     for(int i = 0; i < matrix.length; i++) { 
       if(matrix[i][m] != 0) return false;
@@ -134,24 +158,42 @@ public class Matrix
   // gets the row index of highest element in the mth column
   public int getHighest(int m) {
     int highest = m;
-    for(int i = m+1; i < matrix.length; i++) {
-      if(matrix[i][m] > matrix[highest][i]) highest = i;
-    }
+    if(matrix.length != m) {
+      for(int i = m+1; i < matrix.length; i++) {
+        if(matrix[i][m] > matrix[highest][m]) highest = i;
+      }
+    } else highest = m;
     return highest;
   }
   
-  // finds index ofs first nonzero element in a row
+  // finds index of first nonzero element in a row
   public int getNonZero(int m) {
     for(int i = 0; i < matrix[0].length; i++) { 
-      if(matrix[m][i] != 0) return i;
+        if(matrix[m][i] != 0) return i;
     }
     return -1;
   }
   
   public void scaleAll(int m) {
-    for(int i = m+1; i < matrix.length; i++) {
+    for(int i = m+1; i < matrix[0].length; i++) {
       multiplyAndAdd(m, i, matrix[m][i]);
     }
+    if(m >= matrix[0].length) nuke();
+  }
+  
+  //search and destroy
+  public void nuke() {
+    for (int j = 0; j < matrix.length-1; j++) {
+      for(int k = 1; k < matrix.length; k++)
+        if(rowEquals(j, k)) multiplyAndAdd(k, j, 1);
+    }
+  }  
+  
+  //compare method
+  public boolean rowEquals(int m, int n) {
+    for (int i = 0; i < matrix[0].length; i++) 
+      if (matrix[m][i] != matrix[n][i]) return false;
+    return true; 
   }
   
   // returns a string representation of the matrix
