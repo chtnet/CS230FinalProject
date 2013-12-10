@@ -9,6 +9,11 @@ public class MatrixCalculator {
     matrix = new Matrix(m,n); 
   } 
   
+  public Matrix getMatrix() {
+   return matrix; 
+    
+  }
+  
   public double determinant(Matrix matrix) {
      
     double[][] temp = matrix.getMatrix();
@@ -61,7 +66,7 @@ public class MatrixCalculator {
   {
     Matrix temp = REF(matrix);
     for(int i = 0; i < temp.getMatrix().length; i++) {
-      temp.scaleAll(i);
+      temp.scaleRow(i, matrix.getNonZero(i));
     }
     return temp;
   }
@@ -102,7 +107,7 @@ public class MatrixCalculator {
     fourth.matrix.setEntry(2,1,9);
     fourth.matrix.setEntry(2,2,15.0/4.0);
     System.out.println("The fourth matrix:\n" + fourth.matrix);
-    System.out.println(fourth.determinant(fourth.matrix));
+    System.out.println("Determinant: " + fourth.determinant(fourth.matrix));
     Matrix matrix = fourth.REF(fourth.matrix);
     System.out.println(matrix);
     
