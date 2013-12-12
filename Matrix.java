@@ -178,6 +178,7 @@ public class Matrix
   //search and destroy
   public void nuke() {
     for (int i = 0; i < matrix.length; i++) {
+      if(getNonZero(i) > 0) //only scales the row if it's not all zeroes
       scaleRow(i, matrix[i][getNonZero(i)]); 
     }
     for (int j = 0; j < matrix.length-1; j++) {

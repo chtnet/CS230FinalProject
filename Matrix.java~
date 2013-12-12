@@ -119,6 +119,7 @@ public class Matrix
   public void multiplyAndAdd(int m, int n, double k) {
     for(int i = 0; i < matrix[0].length; i++) {
       matrix[n][i] *= k;
+      //System.out.println(matrix[n][i]*k);
       matrix[m][i] -= matrix[n][i];
       matrix[n][i] /= k;
     }
@@ -174,18 +175,14 @@ public class Matrix
     return -1;
   }
   
-  public void scaleAll(int m) {
-    for(int i = m+1; i < matrix[0].length; i++) {
-      multiplyAndAdd(m, i, matrix[m][i]);
-    }
-    if(m >= matrix[0].length) nuke();
-  }
-  
   //search and destroy
   public void nuke() {
+    for (int i = 0; i < matrix.length; i++) {
+      scaleRow(i, matrix[i][getNonZero(i)]); 
+    }
     for (int j = 0; j < matrix.length-1; j++) {
-      for(int k = 1; k < matrix.length; k++)
-        if(rowEquals(j, k)) multiplyAndAdd(k, j, 1);
+      for(int k = j+1; k < matrix.length; k++)
+        if(rowEquals(j, k)) multiplyAndAdd(k, j, 1);    
     }
   }  
   
@@ -233,6 +230,28 @@ public class Matrix
     m.multiplyAndAdd(0,1,2);
     System.out.println(m);
     System.out.println(m.clone());
+  
+    Matrix fourth = new Matrix(3,3);
+    fourth.setEntry(0,0,4);
+    fourth.setEntry(0,1,12);
+    fourth.setEntry(0,2,5);
+    fourth.setEntry(1,1,7);
+    fourth.setEntry(1,2,29);
+    fourth.setEntry(2,0,3);
+    fourth.setEntry(2,1,9);
+    fourth.setEntry(2,2,15.0/4.0);
+    fourth.multiplyAndAdd(0,2,(4/3));
+    fourth.nuke();
+    System.out.println(fourth);
+    
+    Matrix fifth = new Matrix(2,2);
+    fifth.setEntry(0,0,1);
+    fifth.setEntry(0,1,1);
+    fifth.setEntry(1,0,1);
+    fifth.setEntry(1,1,1);
+    fifth.multiplyAndAdd(1,0,2);
+    System.out.println(fifth);
+    
   }
   
 }

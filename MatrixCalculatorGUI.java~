@@ -4,7 +4,6 @@
 //********************************************************************
 
 import javax.swing.*;
-import java.awt.*;
 
 public class MatrixCalculatorGUI
 {
@@ -20,6 +19,7 @@ public class MatrixCalculatorGUI
       tp.addTab ("Intro", new IntroPanel());
       tp.addTab ("Calculator", new CalculatorPanel());
       tp.addTab ("Terms", new TermsPanel());
+
       frame.getContentPane().add(tp);
 
       frame.pack();
