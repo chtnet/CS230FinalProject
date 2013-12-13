@@ -14,6 +14,7 @@ public class CalculatorPanel extends JPanel
   private JButton enter, calculate, importMatrix, enterValues, clear;
   private int mValue, nValue;
   private JPanel matrixPanel, settingsPanel, southPanel, resultsPanel, centerPanel;
+  private JLabel steps;
   private MatrixCalculator mc;
   private JTextField[][] textFields;
   //-----------------------------------------------------------------
@@ -44,7 +45,7 @@ public class CalculatorPanel extends JPanel
     
     String[] items2 = new String[5];
     items2[0] = "---";
-    items2[1] = "Row-Reduced EF";
+    items2[1] = "Row EF";
     items2[2] = "Column-Reduced EF";
     items2[3] = "Inverse";
     items2[4] = "Determinant";
@@ -93,13 +94,27 @@ public class CalculatorPanel extends JPanel
     add (new JLabel("<html><h2 style ='font-family:Marker felt;color:#B20000;font-size:20px;align:center;text-decoration:underline'>"
                       + "Enter the dimensions and values for your matrix below. Alternatively, import a matrix.</h2></html>"), BorderLayout.NORTH);
     add (matrixPanel, BorderLayout.CENTER);
-      
-      
     add (settingsPanel, BorderLayout.WEST);
     add (southPanel, BorderLayout.SOUTH);
-    add (resultsPanel, BorderLayout.EAST);
+    steps = new JLabel();
+    add (steps, BorderLayout.EAST);
+    //add (resultsPanel, BorderLayout.EAST);
     
     
+  }
+  
+  private JPanel matrixLabel(Matrix matrix) {
+    JPanel grid = new JPanel();
+    grid.setLayout(new GridLayout(matrix.getRowCount(), matrix.getColumnCount()));
+//   String html = "<html><h2 style ='font-family:Marker felt;font-size:20px;align:center'>Matrix result</h1></html>"
+//     + "<p style ='font-family:Marker felt;font-size:16px;align:center'>";
+    for(int i = 0; i < matrix.getRowCount(); i++) {
+      for (int j = 0; j < matrix.getColumnCount(); j++) {
+        grid.add(new JLabel( matrix.getEntry(i, j) + "  "));
+      }
+      
+    }
+    return grid;
   }
   
   private void readIn(String textfile) {
@@ -116,15 +131,15 @@ public class CalculatorPanel extends JPanel
       }
       
       System.out.println(mc.getMatrix());
-          
-    String[] items2 = new String[5];
-    items2[0] = "---";
-    items2[1] = "Row-Reduced EF";
-    items2[2] = "Column-Reduced EF";
-    items2[3] = "Inverse";
-    items2[4] = "Determinant";
- String picked = (String)JOptionPane.showInputDialog(this, "Pick a Calculation:","ComboBox Dialog",JOptionPane.QUESTION_MESSAGE ,null,items2,items2[0]);
- calculate(picked);
+      
+      String[] items2 = new String[5];
+      items2[0] = "---";
+      items2[1] = "Row EF";
+      items2[2] = "Column-Reduced EF";
+      items2[3] = "Inverse";
+      items2[4] = "Determinant";
+      String picked = (String)JOptionPane.showInputDialog(this, "Pick a Calculation:","ComboBox Dialog",JOptionPane.QUESTION_MESSAGE ,null,items2,items2[0]);
+      calculate(picked);
       //String picked = (String)  JOptionPane.showMessageDialog( null, calculation, "Select which calculation you would like to perform", JOptionPane.QUESTION_MESSAGE);
     } catch (FileNotFoundException e) {
       JOptionPane.showMessageDialog(null,  "File not found. Please make sure file name is typed in correctly and includes extension .txt.", "File not found", JOptionPane.WARNING_MESSAGE);
@@ -149,28 +164,51 @@ public class CalculatorPanel extends JPanel
   private void calculate(String s) {
     if(s == "---")
       JOptionPane.showMessageDialog(null, "Please enter which calculation you would like to perform", "Error", JOptionPane.ERROR_MESSAGE);
-     
+    
     else {
       if(textFields != null) {
-      for(int i = 0; i < mValue; i++) {
-        for(int j = 0; j < nValue; j++) {
-          System.out.println(textFields[i][j]);
-          mc.getMatrix().setEntry(i, j, Double.parseDouble(textFields[i][j].getText())); 
-          System.out.println((double)Double.valueOf(textFields[i][j].getText()));
+        for(int i = 0; i < mValue; i++) {
+          for(int j = 0; j < nValue; j++) {
+            System.out.println(textFields[i][j]);
+            mc.getMatrix().setEntry(i, j, Double.parseDouble(textFields[i][j].getText())); 
+            System.out.println((double)Double.valueOf(textFields[i][j].getText()));
+          }
         }
       }
+      if (s == "Row EF") {
+        matrixPanel.removeAll();
+        matrixPanel.repaint();
+        //matrixPanel.add(matrixLabel(mc.REF(mc.getMatrix())));
+        add(matrixLabel(mc.REF(mc.getMatrix())), BorderLayout.CENTER);
+        steps.setText(mc.stepsToString());
+        
       }
-      if (s == "Row-Reduced EF")
-        resultsPanel.add(new JTextArea((mc.RREF(mc.getMatrix()).getMatrix()).toString())); matrixPanel.removeAll(); matrixPanel.add( new JTextArea(mc.stepsToString()));
       
-      if (s == "Column-Reduced EF")
-        resultsPanel.add(new JTextArea((mc.CREF(mc.getMatrix()).getMatrix()).toString()));  matrixPanel.removeAll(); matrixPanel.add( new JTextArea(mc.stepsToString()));
+      if (s == "Column-Reduced EF") {
+        matrixPanel.removeAll();
+        matrixPanel.repaint();
+        add(matrixLabel(mc.CREF(mc.getMatrix())), BorderLayout.CENTER);
+         steps.setText(mc.stepsToString());
+      }
+      //resultsPanel.add(new JTextArea((mc.CREF(mc.getMatrix()).getMatrix()).toString()));  matrixPanel.removeAll(); 
       
-      if (s == "Inverse")
-        resultsPanel.add(new JTextArea((mc.inverse().getMatrix().toString())));  matrixPanel.removeAll(); matrixPanel.add( new JTextArea(mc.stepsToString()));
+      if (s == "Inverse") {
+        matrixPanel.removeAll();
+        matrixPanel.repaint();
+        add(matrixLabel(mc.inverse()), BorderLayout.CENTER);
+        matrixPanel.add(new JLabel(mc.inverse().toString()));
+         steps.setText(mc.stepsToString());
+        
+      }
+      //resultsPanel.add(new JTextArea((mc.inverse().getMatrix().toString())));  matrixPanel.removeAll(); matrixPanel.add( new JTextArea(mc.stepsToString()));
       
-      if (s == "Determinant")
-        System.out.println(mc.determinant(mc.getMatrix()));  matrixPanel.repaint(); matrixPanel.add( new JTextArea(mc.stepsToString()));
+      if (s == "Determinant") {
+        matrixPanel.removeAll();
+        matrixPanel.repaint();
+        JLabel result = new JLabel(String.valueOf(mc.determinant(mc.getMatrix())));
+        add(result, BorderLayout.CENTER);
+      }
+      //System.out.println(mc.determinant(mc.getMatrix()));  matrixPanel.repaint(); matrixPanel.add( new JTextArea(mc.stepsToString()));
       
     }
     

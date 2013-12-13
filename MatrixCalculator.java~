@@ -48,6 +48,7 @@ public class MatrixCalculator {
     double[][] temp = matrix.getMatrix();
     int sign = 1; //keeps track of sign
     double sum = 0; //keeps track of sum
+   
     if(temp.length == temp[0].length) {
       if (temp.length == 1) return temp[0][0];
       else {
@@ -147,6 +148,7 @@ public class MatrixCalculator {
       temp.scaleRow(i, matrix.getNonZero(i));
       steps.add("Scale row " + i + " by " + matrix.getNonZero(i));
     }
+    System.out.println("RREF\n" + temp);
     return temp;
   }
   
@@ -165,7 +167,11 @@ public class MatrixCalculator {
     for(int i = 0; i < steps.size(); i++)
       s += "Step " + i + " " + steps.get(i) + "\n"; count++;
     return s;
-    
+  
+  }
+  
+  public String toString() {
+    return matrix.toString();
     
   }
   public static void main(String[] args) {
@@ -202,7 +208,12 @@ public class MatrixCalculator {
 //    System.out.println(fourth.stepsToString());
 //    System.out.println(matrix);
     
-    
+    MatrixCalculator five = new MatrixCalculator(2,1);
+    five.matrix.setEntry(0,0, 1);
+    five.matrix.setEntry(0,1,2);
+    five.matrix.setEntry(1,0, 3);
+    five.matrix.setEntry(1,1,4);
+    System.out.println(five.determinant(five.matrix));
     
   } 
   

@@ -8,7 +8,7 @@ public class TermsPanel extends JPanel
    //-----------------------------------------------------------------
    public TermsPanel()
    {
-      setBackground (Color.blue);
+      //setBackground (Color.blue);
 
       JLabel l1 = new JLabel ("Matrix Calculator");
       JLabel l2 = new JLabel ("This is how our program works.");
