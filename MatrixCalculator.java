@@ -16,32 +16,7 @@ public class MatrixCalculator {
     return matrix; 
     
   }
-  
-//  public double determinant(Matrix matrix) {
-//    steps.clear();
-//    double[][] temp = matrix.getMatrix();
-//    int sign = 1; //keeps track of sign
-//    double sum = 0; //keeps track of sum
-//    Matrix reducedTemp = REF(matrix);
-//    
-//    if(reducedTemp.getColumnCount() == reducedTemp.getRowCount()) {
-//      if (temp.length == 1) return temp[0][0];
-//      else {
-//        for(int i = 0; i < temp.length; i++) {
-//          Matrix minor = new Matrix(temp.length - 1, temp[0].length - 1);
-//          for(int j = 1; j < temp.length; j++) {
-//            for(int k = 0; k < temp.length; k++) {
-//              if(k < i) minor.setEntry(j - 1, k, temp[j][k]);
-//              if(k > i) minor.setEntry(j - 1, k - 1, temp[j][k]);
-//            }
-//          }
-//          sign = - sign;
-//          sum += temp[i][0] * determinant(minor);
-//        } 
-//      } 
-//    } else sum = Integer.MIN_VALUE;
-//    return sum;
-//  }
+
   
   public double determinant(Matrix matrix) {
     
@@ -52,13 +27,12 @@ public class MatrixCalculator {
    
     if(temp.length == temp[0].length) {
       if (temp.length == 1) return temp[0][0];
+      if (temp.length == 2) return (temp[0][0]*temp[1][1]) - (temp[0][1]*temp[1][0]);
       else {
         for (int i = 0; i < temp.length; i++) {
           Matrix minor = minorMatrix(0, i);
           System.out.println(determinant(minor));
           sum += sign* temp[0][i] * determinant(minor);
-          System.out.println("I'M HERE");
-          System.out.println("sum" + sum);
           sign = - sign;
         }
       }
@@ -66,6 +40,7 @@ public class MatrixCalculator {
     return sum;
   }
   
+ 
   
   
   
@@ -212,21 +187,21 @@ public class MatrixCalculator {
     System.out.println("Determinant: " + fourth.determinant(fourth.matrix));
     Matrix matrix = fourth.REF(fourth.matrix);
     System.out.println(fourth.stepsToString());
-    System.out.println(matrix);
-    System.out.println(fourth.minorMatrix(1,1));
+
     
-//    MatrixCalculator five = new MatrixCalculator(2,2);
-//   
-//    five.matrix.setEntry(0,0, 1);
-//    five.matrix.setEntry(0,1,2);
-//    five.matrix.setEntry(1,0, 3);
-//    five.matrix.setEntry(1,1,4);
-//    System.out.println(five.matrix);
-//    System.out.println("inverse " + five.inverse());
-//    
-//    MatrixCalculator six = new MatrixCalculator(1,1);
-//    six.matrix.setEntry(0,0,4);
-//    System.out.println("det " + six.determinant(six.matrix));
+    MatrixCalculator five = new MatrixCalculator(2,2);
+   
+    five.matrix.setEntry(0,0, 1);
+    five.matrix.setEntry(0,1,2);
+    five.matrix.setEntry(1,0, 3);
+    five.matrix.setEntry(1,1,4);
+    System.out.println(five.matrix);
+    System.out.println("det " + five.determinant(five.matrix));
+    
+    
+    MatrixCalculator six = new MatrixCalculator(1,1);
+    six.matrix.setEntry(0,0,4);
+    System.out.println("det " + six.determinant(six.matrix));
     
    
     
