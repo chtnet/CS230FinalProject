@@ -135,6 +135,17 @@ public class Matrix
     
   }
   
+  public void removeColumn(int m) {
+    for(int i = 0; i < matrix.length; i++) {
+      for(int j = 0; j < matrix[0].length - 1; j++)
+        matrix[i][j] = matrix[i][j+1];
+    }
+    for(int i = 0; i < matrix[0].length; i++) {
+      matrix[i][matrix[0].length-1] = 0;
+    }
+    columnCount--; 
+  }
+  
   
   
   
@@ -299,7 +310,7 @@ public class Matrix
     for(int i = 0; i < matrix.length; i++) {
       for(int j = 0; j < matrix[0].length; j++)
         s += matrix[i][j] + " "; 
-      s += "<br>";
+      s += "\n";
     }
     return s;
   }
@@ -350,6 +361,9 @@ public class Matrix
     fifth.setEntry(1,0,1);
     fifth.setEntry(1,1,1);
     fifth.multiplyAndAdd(1,0,2);
+    System.out.println(fifth);
+    fifth.removeColumn(0);
+    fifth.removeRow(0);
     System.out.println(fifth);
     
   }
