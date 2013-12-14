@@ -196,21 +196,21 @@ public class CalculatorPanel extends JPanel
       if (s == "Inverse") {
         matrixPanel.removeAll();
         matrixPanel.repaint();
-        add(matrixLabel(mc.inverse()), BorderLayout.CENTER);
+        if(textFields.length != textFields[0].length) matrixPanel.add(new JLabel("Inverse could not be calculated because the matrix is not square."));
+        else add(matrixLabel(mc.inverse()), BorderLayout.CENTER);
          steps.setText(mc.stepsToString());
         
       }
-      //resultsPanel.add(new JTextArea((mc.inverse().getMatrix().toString())));  matrixPanel.removeAll(); matrixPanel.add( new JTextArea(mc.stepsToString()));
-      
+     
       if (s == "Determinant") {
         matrixPanel.removeAll();
         matrixPanel.repaint();
-        JLabel result = new JLabel(String.valueOf(mc.determinant(mc.getMatrix().getMatrix())));
+        JLabel result = new JLabel();
+        if(textFields.length != textFields[0].length)   result = new JLabel("Determinant could not be calculated because the matrix is not square.");
+        else  result = new JLabel(String.valueOf(mc.determinant(mc.getMatrix().getMatrix())));
         matrixPanel.add(result);
         add(matrixPanel, BorderLayout.CENTER);
       }
-      //System.out.println(mc.determinant(mc.getMatrix()));  matrixPanel.repaint(); matrixPanel.add( new JTextArea(mc.stepsToString()));
-      
     }
     
     
