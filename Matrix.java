@@ -32,6 +32,12 @@ public class Matrix
     columnCount = n;
   }
   
+  public Matrix(double[][] array) {
+    matrix = array;
+    rowCount = array[0].length;
+    columnCount = array.length;
+  }
+  
   /**
    * Clones Matrix object.
    * 
@@ -293,7 +299,7 @@ public class Matrix
     for(int i = 0; i < matrix.length; i++) {
       for(int j = 0; j < matrix[0].length; j++)
         s += matrix[i][j] + " "; 
-      s += "\n";
+      s += "<br>";
     }
     return s;
   }

@@ -17,6 +17,11 @@ public class MatrixCalculator {
     
   }
   
+  public LinkedList<String> getSteps() {
+   return steps; 
+    
+  }
+  
   
 //  public double determinant(Matrix matrix) {
 //    
@@ -59,14 +64,18 @@ public class MatrixCalculator {
               smaller[a-1][b-1]=matrix[a][b];
             }
           }
+          steps.add("minor of 1, " + (i+1) + "\n");
+           steps.add(new Matrix(smaller).toString());
         }
+        
+       
         if(i%2==0){ //sign changes based on i
           s=1;
         }
         else{
           s=-1;
         }
-        sum+=s*matrix[0][i]*(determinant(smaller)); //recursive step: determinant of larger determined by smaller.
+        sum+=s*matrix[0][i]*(determinant(smaller)); steps.add("Current sum: " + sum); //recursive step: determinant of larger determined by smaller.
       }
     }
     return(sum); //returns determinant value. once stack is finished, returns final determinant.
@@ -138,13 +147,15 @@ public class MatrixCalculator {
     Matrix temp = matrix.clone();
     for(int i = 0; i < temp.getMatrix()[0].length; i++) {
       if(!temp.isColumnZeroes(i)) { // ensures column is not all zeroes
+        steps.add("Swap rows " + (i+1) + " and " + (temp.getHighest(i) + 1)); count++; steps.add(temp.toString());
         temp.swapRows(i, temp.getHighest(i)); // swaps ith row with row with highest first elt
-        if ( i !=  temp.getHighest(i))
-          steps.add("Swap rows " + i + " and " + temp.getHighest(i)); count++;
+        //if ( i !=  temp.getHighest(i))
+          
         int index = temp.getNonZero(i);
+        steps.add("Scale row " + (i+1) + " by " + temp.getMatrix()[i][index]); count++; steps.add(temp.toString());
         temp.scaleRow(i, temp.getMatrix()[i][index]); // scales the ith row by value of first element
-        if ( i !=  temp.getMatrix()[i][index])
-          steps.add("Scale row " + i + " by " + temp.getMatrix()[i][index]); count++;
+        //if ( i !=  temp.getMatrix()[i][index])
+          
       }
     }
     System.out.println(temp);
@@ -158,7 +169,7 @@ public class MatrixCalculator {
     Matrix temp = REF(matrix);
     for(int i = 0; i < temp.getMatrix().length; i++) {
       temp.scaleRow(i, matrix.getNonZero(i));
-      steps.add("Scale row " + i + " by " + matrix.getNonZero(i));
+      steps.add("Scale row " + i + " by " + matrix.getNonZero(i)); steps.add(temp.toString());
     }
     System.out.println("RREF\n" + temp);
     return temp;
@@ -173,15 +184,7 @@ public class MatrixCalculator {
     return temp;
   }
   
-  public String stepsToString() {
-    String s = "";
-    int count = 0;
-    for(int i = 0; i < steps.size(); i++)
-      s += "Step " + i + " " + steps.get(i) + "\n"; count++;
-    return s;
-    
-  }
-  
+
   public String toString() {
     return matrix.toString();
     
@@ -216,7 +219,7 @@ public class MatrixCalculator {
     System.out.println("The fourth matrix:\n" + fourth.matrix);
     System.out.println("Inverse: " + fourth.inverse());
     Matrix matrix = fourth.REF(fourth.matrix);
-    System.out.println(fourth.stepsToString());
+    
     
     
     MatrixCalculator five = new MatrixCalculator(2,2);

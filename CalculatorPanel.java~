@@ -11,12 +11,12 @@ public class CalculatorPanel extends JPanel
 {
   
   private JComboBox m, n, calculation;
-  private JButton enter, calculate, importMatrix, enterValues, clear;
+  private JButton enter, calculate, importMatrix, enterValues, clear, showSteps;
   private int mValue, nValue;
   private JPanel matrixPanel, settingsPanel, southPanel, resultsPanel, centerPanel;
-  private JLabel steps;
   private MatrixCalculator mc;
   private JTextField[][] textFields;
+  
   //-----------------------------------------------------------------
   //  Sets up this panel with two labels.
   //-----------------------------------------------------------------
@@ -55,15 +55,10 @@ public class CalculatorPanel extends JPanel
     calculation.addActionListener(new ButtonListener());
     matrixPanel = new JPanel();
     settingsPanel = new JPanel();
-    //settingsPanel.setBackground(new Color(206, 239, 242));
     resultsPanel = new JPanel();
-    //resultsPanel.setBackground(new Color(206, 239, 242));
-    centerPanel = new JPanel();
-    //centerPanel.setBackground(new Color(206, 239, 242));
-    
-    centerPanel.setLayout(new FlowLayout());
-    centerPanel.add(matrixPanel);
-    centerPanel.add(resultsPanel);
+    resultsPanel.setLayout (new BoxLayout (resultsPanel, BoxLayout.Y_AXIS));
+
+  
     
     southPanel = new JPanel();
     southPanel.setLayout(new FlowLayout());
@@ -87,8 +82,15 @@ public class CalculatorPanel extends JPanel
     settingsPanel.add(calculation);
     settingsPanel.add(importMatrix);
     
+    showSteps = new JButton("Show me the steps!");
+    showSteps.addActionListener(new ButtonListener());
+    showSteps.setEnabled(false);
+    
     southPanel.add(clear);
     southPanel.add(calculate);
+    southPanel.add(showSteps);
+    
+    
     //southPanel.setBackground(new Color(206, 239, 242));
     
     
@@ -97,8 +99,8 @@ public class CalculatorPanel extends JPanel
     add (matrixPanel, BorderLayout.CENTER);
     add (settingsPanel, BorderLayout.WEST);
     add (southPanel, BorderLayout.SOUTH);
-    steps = new JLabel();
-    add (steps, BorderLayout.EAST);
+    
+    
     //add (resultsPanel, BorderLayout.EAST);
     
     
@@ -140,6 +142,7 @@ public class CalculatorPanel extends JPanel
       items2[3] = "Inverse";
       items2[4] = "Determinant";
       String picked = (String)JOptionPane.showInputDialog(this, "Pick a Calculation:","ComboBox Dialog",JOptionPane.QUESTION_MESSAGE ,null,items2,items2[0]);
+      System.out.println("PICKED: " + picked);
       calculate(picked);
       //String picked = (String)  JOptionPane.showMessageDialog( null, calculation, "Select which calculation you would like to perform", JOptionPane.QUESTION_MESSAGE);
     } catch (FileNotFoundException e) {
@@ -162,6 +165,16 @@ public class CalculatorPanel extends JPanel
     
   }
   
+  private void clear() {
+      matrixPanel.removeAll();
+        m.setSelectedIndex(0);
+        n.setSelectedIndex(0);
+        calculation.setSelectedIndex(0);
+        mc = null;
+        matrixPanel.repaint(); 
+    
+  }
+  
   private void calculate(String s) {
     if(s == "---")
       JOptionPane.showMessageDialog(null, "Please enter which calculation you would like to perform", "Error", JOptionPane.ERROR_MESSAGE);
@@ -170,9 +183,14 @@ public class CalculatorPanel extends JPanel
       if(textFields != null) {
         for(int i = 0; i < mValue; i++) {
           for(int j = 0; j < nValue; j++) {
+             try {
             System.out.println(textFields[i][j]);
             mc.getMatrix().setEntry(i, j, Double.parseDouble(textFields[i][j].getText())); 
             System.out.println((double)Double.valueOf(textFields[i][j].getText()));
+            } catch (NumberFormatException e) {
+              JOptionPane.showMessageDialog(null, "Please enter integers into every field (does not accept complex numbers)", "Error", JOptionPane.ERROR_MESSAGE);
+              clear(); return;
+            }
           }
         }
       }
@@ -181,7 +199,7 @@ public class CalculatorPanel extends JPanel
         matrixPanel.repaint();
         //matrixPanel.add(matrixLabel(mc.REF(mc.getMatrix())));
         add(matrixLabel(mc.REF(mc.getMatrix())), BorderLayout.CENTER);
-        steps.setText(mc.stepsToString());
+        
         
       }
       
@@ -189,27 +207,30 @@ public class CalculatorPanel extends JPanel
         matrixPanel.removeAll();
         matrixPanel.repaint();
         add(matrixLabel(mc.CREF(mc.getMatrix())), BorderLayout.CENTER);
-         steps.setText(mc.stepsToString());
+        
       }
       //resultsPanel.add(new JTextArea((mc.CREF(mc.getMatrix()).getMatrix()).toString()));  matrixPanel.removeAll(); 
       
       if (s == "Inverse") {
         matrixPanel.removeAll();
         matrixPanel.repaint();
-        add(matrixLabel(mc.inverse()), BorderLayout.CENTER);
-         steps.setText(mc.stepsToString());
+        if(textFields.length != textFields[0].length) matrixPanel.add(new JLabel("Inverse could not be calculated because the matrix is not square."));
+        else add(matrixLabel(mc.inverse()), BorderLayout.CENTER);
+        
         
       }
-      //resultsPanel.add(new JTextArea((mc.inverse().getMatrix().toString())));  matrixPanel.removeAll(); matrixPanel.add( new JTextArea(mc.stepsToString()));
       
       if (s == "Determinant") {
         matrixPanel.removeAll();
         matrixPanel.repaint();
-        JLabel result = new JLabel(String.valueOf(mc.determinant(mc.getMatrix().getMatrix())));
+        JLabel result = new JLabel();
+        if(textFields.length != textFields[0].length)   result = new JLabel("Determinant could not be calculated because the matrix is not square.");
+        else  result = new JLabel(String.valueOf(mc.determinant(mc.getMatrix().getMatrix())));
         matrixPanel.add(result);
         add(matrixPanel, BorderLayout.CENTER);
       }
-      //System.out.println(mc.determinant(mc.getMatrix()));  matrixPanel.repaint(); matrixPanel.add( new JTextArea(mc.stepsToString()));
+      showSteps.setEnabled(true);
+      
       
     }
     
@@ -223,7 +244,7 @@ public class CalculatorPanel extends JPanel
         readIn(new String( JOptionPane.showInputDialog("Enter text file name to import matrix; file must be located in same directory." + "\n"
                                                          + "Also note that entries on the same line (e.g. within the same row" + "\n"
                                                          + "should be separated by integers.")));
-        //System.out.println(fileName);
+       
         
       }
       if(event.getSource() == calculate) {
@@ -231,14 +252,22 @@ public class CalculatorPanel extends JPanel
       }
       
       if(event.getSource() == clear) {
-        matrixPanel.removeAll();
-        m.setSelectedIndex(0);
-        n.setSelectedIndex(0);
-        calculation.setSelectedIndex(0);
-        mc = null;
-        matrixPanel.repaint();
+       clear();
         
-      } 
+      }
+      
+      if (event.getSource() == showSteps) {
+        
+        
+        StepsPanel sp = new StepsPanel(mc);
+        JFrame stepsFrame = new JFrame ("Steps");
+        stepsFrame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
+        stepsFrame.getContentPane().add(sp);
+        stepsFrame.pack();
+        stepsFrame.setVisible(true);
+        
+        
+      }
     }
   }
   
