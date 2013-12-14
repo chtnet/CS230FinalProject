@@ -18,28 +18,58 @@ public class MatrixCalculator {
   }
 
   
-  public double determinant(Matrix matrix) {
-    
-   
-    double[][] temp = matrix.getMatrix();
-    int sign = 1; //keeps track of sign
-    double sum = 0; //keeps track of sum
-   
-    if(temp.length == temp[0].length) {
-      if (temp.length == 1) return temp[0][0];
-      if (temp.length == 2) return (temp[0][0]*temp[1][1]) - (temp[0][1]*temp[1][0]);
-      else {
-        for (int i = 0; i < temp.length; i++) {
-          Matrix minor = minorMatrix(0, i);
-          System.out.println(determinant(minor));
-          sum += sign* temp[0][i] * determinant(minor);
-          sign = - sign;
-        }
-      }
-    }
-    return sum;
-  }
+//  public double determinant(Matrix matrix) {
+//    
+//   
+//    double[][] temp = matrix.getMatrix();
+//    int sign = 1; //keeps track of sign
+//    double sum = 0; //keeps track of sum
+//   
+//    if(temp.length == temp[0].length) {
+//      if (temp.length == 1) return temp[0][0];
+//     else if (temp.length == 2) return (temp[0][0]*temp[1][1]) - (temp[0][1]*temp[1][0]);
+//      else {
+//        for (int i = 0; i < temp.length; i++) {
+//          Matrix minor = minorMatrix(0, i);
+//          System.out.println("MInor\n" + minor);
+//          System.out.println(determinant(minor));
+//          sum += sign* temp[0][i] * determinant(minor);
+//          sign = - sign;
+//        }
+//      }
+//    }
+//    return sum;
+//  }
   
+  public double determinant(double[][] matrix){ //method sig. takes a matrix (two dimensional array), returns determinant.
+    int sum=0; 
+    int s;
+    if(matrix.length==1){  //bottom case of recursion. size 1 matrix determinant is itself.
+      return(matrix[0][0]);
+    }
+    for(int i=0;i<matrix.length;i++){ //finds determinant using row-by-row expansion
+      double[][]smaller= new double[matrix.length-1][matrix.length-1]; //creates smaller matrix- values not in same row, column
+//      for(int a=1;a<matrix.length;a++){
+//        for(int b=0;b<matrix.length;b++){
+//          if(b<i){
+//            smaller[a-1][b]=matrix[a][b];
+//          }
+//          else if(b>i){
+//            smaller[a-1][b-1]=matrix[a][b];
+//          }
+//        }
+//      }
+      if(i%2==0){ //sign changes based on i
+        s=1;
+      }
+      else{
+        s=-1;
+      }
+      sum+=s*matrix[0][i]*(determinant(smaller)); //recursive step: determinant of larger determined by smaller.
+    }
+    return(sum); //returns determinant value. once stack is finished, returns final determinant.
+  }
+
  
   
   
@@ -48,6 +78,7 @@ public class MatrixCalculator {
   
   private Matrix minorMatrix(int m, int n) //creates submatrix excluding mth row and nth column
   {
+ 
     double[][] temp = matrix.getMatrix();
     Matrix minor = new Matrix(temp.length - 1, temp[0].length - 1);
     int r = -1; //keeps track of minor lengths, adjusts by shifting rows
@@ -68,7 +99,7 @@ public class MatrixCalculator {
   
   private double cofactor(int m, int n) {
     Matrix minor = minorMatrix(m, n);
-    double cofactor = determinant(minor);
+    double cofactor = determinant(minor.getMatrix());
     System.out.println("cofactor "+ cofactor);
     if((m+n) %2 == 1) cofactor = - cofactor;
     return cofactor;
@@ -92,7 +123,7 @@ public class MatrixCalculator {
   
   public Matrix inverse() {
     Matrix inverse = adjoint();
-    double det = determinant(getMatrix());
+    double det = determinant(getMatrix().getMatrix());
     System.out.println(det);
     for(int i = 0; i < inverse.getRowCount(); i++) {
       for(int j = 0; j < inverse.getColumnCount(); j++) {
@@ -184,7 +215,7 @@ public class MatrixCalculator {
     fourth.matrix.setEntry(2,1,9);
     fourth.matrix.setEntry(2,2,15.0/4.0);
     System.out.println("The fourth matrix:\n" + fourth.matrix);
-    System.out.println("Determinant: " + fourth.determinant(fourth.matrix));
+    System.out.println("Determinant: " + fourth.determinant(fourth.matrix.getMatrix()));
     Matrix matrix = fourth.REF(fourth.matrix);
     System.out.println(fourth.stepsToString());
 
@@ -196,12 +227,12 @@ public class MatrixCalculator {
     five.matrix.setEntry(1,0, 3);
     five.matrix.setEntry(1,1,4);
     System.out.println(five.matrix);
-    System.out.println("det " + five.determinant(five.matrix));
+    System.out.println("det " + five.determinant(five.matrix.getMatrix()));
     
     
     MatrixCalculator six = new MatrixCalculator(1,1);
     six.matrix.setEntry(0,0,4);
-    System.out.println("det " + six.determinant(six.matrix));
+    System.out.println("det " + six.determinant(six.matrix.getMatrix()));
     
    
     

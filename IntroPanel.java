@@ -9,7 +9,7 @@ public class IntroPanel extends JPanel
    public IntroPanel()
    {
       setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-      setBackground(new Color(206, 239, 242));
+      //setBackground(new Color(206, 239, 242));
 
       JLabel l1 = new JLabel ("<html><h1 style ='font-family:Marker felt;color:#33CC33;font-size:36px;align:center'>Matrix Calculator</h1>");
       JLabel imgLabel = new JLabel(new ImageIcon("underline.gif"));

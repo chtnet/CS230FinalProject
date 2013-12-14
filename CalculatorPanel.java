@@ -24,7 +24,8 @@ public class CalculatorPanel extends JPanel
   {
     
     setLayout (new BorderLayout());
-    setBackground(new Color(206, 239, 242));
+    //setBackground(new Color(206, 239, 242));
+    
     
     //String info for combo boxes
     String[] items = new String [6];
@@ -54,11 +55,11 @@ public class CalculatorPanel extends JPanel
     calculation.addActionListener(new ButtonListener());
     matrixPanel = new JPanel();
     settingsPanel = new JPanel();
-    settingsPanel.setBackground(new Color(206, 239, 242));
+    //settingsPanel.setBackground(new Color(206, 239, 242));
     resultsPanel = new JPanel();
-    resultsPanel.setBackground(new Color(206, 239, 242));
+    //resultsPanel.setBackground(new Color(206, 239, 242));
     centerPanel = new JPanel();
-    centerPanel.setBackground(new Color(206, 239, 242));
+    //centerPanel.setBackground(new Color(206, 239, 242));
     
     centerPanel.setLayout(new FlowLayout());
     centerPanel.add(matrixPanel);
@@ -88,7 +89,7 @@ public class CalculatorPanel extends JPanel
     
     southPanel.add(clear);
     southPanel.add(calculate);
-    southPanel.setBackground(new Color(206, 239, 242));
+    //southPanel.setBackground(new Color(206, 239, 242));
     
     
     add (new JLabel("<html><h2 style ='font-family:Marker felt;color:#B20000;font-size:20px;align:center;text-decoration:underline'>"
@@ -196,7 +197,6 @@ public class CalculatorPanel extends JPanel
         matrixPanel.removeAll();
         matrixPanel.repaint();
         add(matrixLabel(mc.inverse()), BorderLayout.CENTER);
-        matrixPanel.add(new JLabel(mc.inverse().toString()));
          steps.setText(mc.stepsToString());
         
       }
@@ -205,8 +205,9 @@ public class CalculatorPanel extends JPanel
       if (s == "Determinant") {
         matrixPanel.removeAll();
         matrixPanel.repaint();
-        JLabel result = new JLabel(String.valueOf(mc.determinant(mc.getMatrix())));
-        add(result, BorderLayout.CENTER);
+        JLabel result = new JLabel(String.valueOf(mc.determinant(mc.getMatrix().getMatrix())));
+        matrixPanel.add(result);
+        add(matrixPanel, BorderLayout.CENTER);
       }
       //System.out.println(mc.determinant(mc.getMatrix()));  matrixPanel.repaint(); matrixPanel.add( new JTextArea(mc.stepsToString()));
       
