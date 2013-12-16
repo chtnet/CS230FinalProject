@@ -1,3 +1,12 @@
+/**
+ * Intro Panel which displays instructions for how to use Matrix Calculator.
+ * 
+ * @author Sravanti Tekumalla
+ */
+
+
+
+
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -121,7 +130,6 @@ public class CalculatorPanel extends JPanel
   }
   
   private void readIn(String textfile) {
-    
     try {
       Scanner reader = new Scanner(new File(textfile));
       fileDimensions(textfile);
@@ -194,16 +202,17 @@ public class CalculatorPanel extends JPanel
           }
         }
       }
-      if (s == "Row EF") {
+      if (s.equals("Row EF")) {
         matrixPanel.removeAll();
         matrixPanel.repaint();
         //matrixPanel.add(matrixLabel(mc.REF(mc.getMatrix())));
         add(matrixLabel(mc.REF(mc.getMatrix())), BorderLayout.CENTER);
         
         
+        
       }
       
-      if (s == "Column-Reduced EF") {
+      if (s.equals("Column-Reduced EF")) {
         matrixPanel.removeAll();
         matrixPanel.repaint();
         add(matrixLabel(mc.CREF(mc.getMatrix())), BorderLayout.CENTER);
@@ -211,7 +220,7 @@ public class CalculatorPanel extends JPanel
       }
       //resultsPanel.add(new JTextArea((mc.CREF(mc.getMatrix()).getMatrix()).toString()));  matrixPanel.removeAll(); 
       
-      if (s == "Inverse") {
+      if (s.equals("Inverse")) {
         matrixPanel.removeAll();
         matrixPanel.repaint();
         if(textFields.length != textFields[0].length) matrixPanel.add(new JLabel("Inverse could not be calculated because the matrix is not square."));
@@ -220,7 +229,7 @@ public class CalculatorPanel extends JPanel
         
       }
       
-      if (s == "Determinant") {
+      if (s.equals("Determinant")) {
         matrixPanel.removeAll();
         matrixPanel.repaint();
         JLabel result = new JLabel();
@@ -230,6 +239,7 @@ public class CalculatorPanel extends JPanel
         add(matrixPanel, BorderLayout.CENTER);
       }
       showSteps.setEnabled(true);
+    
       
       
     }
@@ -261,6 +271,8 @@ public class CalculatorPanel extends JPanel
         
         StepsPanel sp = new StepsPanel(mc);
         JFrame stepsFrame = new JFrame ("Steps");
+        JScrollPane scroller = new JScrollPane(sp);  
+        stepsFrame.getContentPane().add(scroller, BorderLayout.CENTER); 
         stepsFrame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
         stepsFrame.getContentPane().add(sp);
         stepsFrame.pack();

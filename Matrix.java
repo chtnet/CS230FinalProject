@@ -7,7 +7,7 @@
  */
 import java.util.*;
 
-public class Matrix 
+public class Matrix implements MatrixOps
 {
   
   private double[][] matrix;
@@ -245,9 +245,9 @@ public class Matrix
   }
   
   /**
-   * Finds the highest int in a row 
+   * Finds the highest int in a column 
    * 
-   * @param m the int of the row to be checked
+   * @param m the int of the column to be checked
    * @return int of highest integer in the row
    */
   public int getHighest(int m) {
@@ -255,6 +255,7 @@ public class Matrix
     if(matrix.length != m) {
       for(int i = m+1; i < matrix.length; i++) {
         if(matrix[i][m] > matrix[highest][m]) highest = i;
+        System.out.println("i : " + i + " highest: " + highest);
       }
     } else highest = m;
     return highest;
@@ -274,7 +275,7 @@ public class Matrix
   }
   
   //search and destroy
-  public void nuke() {
+  public void removeDuplicateRows() {
     for (int i = 0; i < matrix.length; i++) {
       if(getNonZero(i) > 0) //only scales the row if it's not all zeroes
         scaleRow(i, matrix[i][getNonZero(i)]); 
@@ -310,7 +311,7 @@ public class Matrix
     for(int i = 0; i < matrix.length; i++) {
       for(int j = 0; j < matrix[0].length; j++)
         s += matrix[i][j] + " "; 
-      s += "\n";
+      s += "<br>";
     }
     return s;
   }
@@ -342,18 +343,20 @@ public class Matrix
     System.out.println(m);
     System.out.println(m.clone());
     
-    Matrix fourth = new Matrix(3,3);
+    Matrix fourth = new Matrix(2,3);
     fourth.setEntry(0,0,4);
     fourth.setEntry(0,1,12);
-    fourth.setEntry(0,2,5);
+    //fourth.setEntry(0,2,5);
     fourth.setEntry(1,1,7);
-    fourth.setEntry(1,2,29);
+    //fourth.setEntry(1,2,29);
     fourth.setEntry(2,0,3);
     fourth.setEntry(2,1,9);
-    fourth.setEntry(2,2,15.0/4.0);
+  
+    
     fourth.multiplyAndAdd(0,2,(4/3));
-    fourth.nuke();
+    fourth.removeDuplicateRows();
     System.out.println(fourth);
+     System.out.println(fourth.getHighest(0));
     
     Matrix fifth = new Matrix(2,2);
     fifth.setEntry(0,0,1);
@@ -362,9 +365,7 @@ public class Matrix
     fifth.setEntry(1,1,1);
     fifth.multiplyAndAdd(1,0,2);
     System.out.println(fifth);
-    fifth.removeColumn(0);
-    fifth.removeRow(0);
-    System.out.println(fifth);
+   
     
   }
   

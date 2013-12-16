@@ -17,9 +17,10 @@ public class MatrixCalculatorGUI
       frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
 
       JTabbedPane tp = new JTabbedPane();
+      CalculatorPanel cp = new CalculatorPanel();
       tp.addTab ("Intro", new IntroPanel());
-      tp.addTab ("Calculator", new CalculatorPanel());
-      tp.addTab ("Terms", new TermsPanel());
+      tp.addTab ("Calculator", cp);
+      tp.addTab ("Terms", new TermsPanel(cp));
       frame.getContentPane().add(tp);
 
       frame.pack();

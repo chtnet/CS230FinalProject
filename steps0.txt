@@ -1,0 +1,11 @@
+<html><p style ='font-family:Marker felt;font-size:16px;text-decoration:underline'>Original matrix:</p>
+1.0 5.0 <br>4.0 2.0 <br>
+<html><p style ='font-family:Marker felt;font-size:16px;text-decoration:underline'>Steps:</p>
+Swap rows 1 and 2
+1.0 5.0 <br>4.0 2.0 <br>
+Scale row 1 by 4.0
+4.0 2.0 <br>1.0 5.0 <br>
+Swap rows 2 and 2
+1.0 0.5 <br>1.0 5.0 <br>
+Scale row 2 by 1.0
+1.0 0.5 <br>1.0 5.0 <br>

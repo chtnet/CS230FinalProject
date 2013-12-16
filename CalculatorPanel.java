@@ -1,3 +1,12 @@
+/**
+ * Intro Panel which displays instructions for how to use Matrix Calculator.
+ * 
+ * @author Sravanti Tekumalla
+ */
+
+
+
+
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -69,7 +78,7 @@ public class CalculatorPanel extends JPanel
     importMatrix.addActionListener(new ButtonListener());
     clear = new JButton("<html><p style ='font-family:Marker felt;color:#FF0000;font-size:15px;align:left'>Clear</p></html>");
     clear.addActionListener(new ButtonListener());
-    importMatrix.addActionListener(new ButtonListener());
+    
     
     
     
@@ -121,7 +130,6 @@ public class CalculatorPanel extends JPanel
   }
   
   private void readIn(String textfile) {
-    
     try {
       Scanner reader = new Scanner(new File(textfile));
       fileDimensions(textfile);
@@ -141,10 +149,9 @@ public class CalculatorPanel extends JPanel
       items2[2] = "Column-Reduced EF";
       items2[3] = "Inverse";
       items2[4] = "Determinant";
-      String picked = (String)JOptionPane.showInputDialog(this, "Pick a Calculation:","ComboBox Dialog",JOptionPane.QUESTION_MESSAGE ,null,items2,items2[0]);
+      String picked = (String)JOptionPane.showInputDialog(this, "Pick which Calculation:","Choose calculation",JOptionPane.QUESTION_MESSAGE ,null,items2,items2[0]);
       System.out.println("PICKED: " + picked);
       calculate(picked);
-      //String picked = (String)  JOptionPane.showMessageDialog( null, calculation, "Select which calculation you would like to perform", JOptionPane.QUESTION_MESSAGE);
     } catch (FileNotFoundException e) {
       JOptionPane.showMessageDialog(null,  "File not found. Please make sure file name is typed in correctly and includes extension .txt.", "File not found", JOptionPane.WARNING_MESSAGE);
     }  
@@ -188,50 +195,50 @@ public class CalculatorPanel extends JPanel
             mc.getMatrix().setEntry(i, j, Double.parseDouble(textFields[i][j].getText())); 
             System.out.println((double)Double.valueOf(textFields[i][j].getText()));
             } catch (NumberFormatException e) {
-              JOptionPane.showMessageDialog(null, "Please enter integers into every field (does not accept complex numbers)", "Error", JOptionPane.ERROR_MESSAGE);
+              JOptionPane.showMessageDialog(null, "Please enter a valid integer for every field (does not accept complex numbers)", "Error", JOptionPane.ERROR_MESSAGE);
               clear(); return;
             }
           }
         }
       }
-      if (s == "Row EF") {
+      if (s.equals("Row EF")) {
         matrixPanel.removeAll();
         matrixPanel.repaint();
-        //matrixPanel.add(matrixLabel(mc.REF(mc.getMatrix())));
         add(matrixLabel(mc.REF(mc.getMatrix())), BorderLayout.CENTER);
+        
         
         
       }
       
-      if (s == "Column-Reduced EF") {
+      if (s.equals("Column-Reduced EF")) {
         matrixPanel.removeAll();
         matrixPanel.repaint();
         add(matrixLabel(mc.CREF(mc.getMatrix())), BorderLayout.CENTER);
         
       }
-      //resultsPanel.add(new JTextArea((mc.CREF(mc.getMatrix()).getMatrix()).toString()));  matrixPanel.removeAll(); 
+    
       
-      if (s == "Inverse") {
+      if (s.equals("Inverse")) {
         matrixPanel.removeAll();
         matrixPanel.repaint();
-        if(textFields.length != textFields[0].length) matrixPanel.add(new JLabel("Inverse could not be calculated because the matrix is not square."));
+        if(mc.getMatrix().getRowCount() != mc.getMatrix().getColumnCount()) matrixPanel.add(new JLabel("Inverse could not be calculated because the matrix is not square."));
         else add(matrixLabel(mc.inverse()), BorderLayout.CENTER);
         
         
       }
       
-      if (s == "Determinant") {
+      if (s.equals("Determinant")) {
         matrixPanel.removeAll();
         matrixPanel.repaint();
         JLabel result = new JLabel();
-        if(textFields.length != textFields[0].length)   result = new JLabel("Determinant could not be calculated because the matrix is not square.");
+         System.out.println("Y NULLPOINTER EXCEPTION Y\n" + Arrays.toString(mc.getMatrix().getMatrix()));
+        if(mc.getMatrix().getRowCount() != mc.getMatrix().getColumnCount())   result = new JLabel("Determinant could not be calculated because the matrix is not square.");
         else  result = new JLabel(String.valueOf(mc.determinant(mc.getMatrix().getMatrix())));
+       
         matrixPanel.add(result);
         add(matrixPanel, BorderLayout.CENTER);
       }
-      showSteps.setEnabled(true);
-      
-      
+      showSteps.setEnabled(true); 
     }
     
     
@@ -241,10 +248,11 @@ public class CalculatorPanel extends JPanel
     
     public void actionPerformed (ActionEvent event) {
       if(event.getSource() == importMatrix) {
+         System.out.println("Importing");
         readIn(new String( JOptionPane.showInputDialog("Enter text file name to import matrix; file must be located in same directory." + "\n"
                                                          + "Also note that entries on the same line (e.g. within the same row" + "\n"
                                                          + "should be separated by integers.")));
-       
+      
         
       }
       if(event.getSource() == calculate) {

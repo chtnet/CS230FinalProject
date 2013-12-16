@@ -50,7 +50,7 @@ public class MatrixCalculator {
     int sum=0; 
     int s;
     if(matrix.length == matrix[0].length) {
-      if(matrix.length==1){  //bottom case of recursion. size 1 matrix determinant is itself.
+      if(matrix.length==1){  //base case - size 1 matrix determinant is itself.
         return(matrix[0][0]);
       }
       for(int i=0;i<matrix.length;i++){ //finds determinant using row-by-row expansion
@@ -64,7 +64,7 @@ public class MatrixCalculator {
               smaller[a-1][b-1]=matrix[a][b];
             }
           }
-          steps.add("minor of 1, " + (i+1) + "\n");
+          steps.add("Minor matrix of row 1, column " + (i+1) + "<br>");
            steps.add(new Matrix(smaller).toString());
         }
         
@@ -78,6 +78,7 @@ public class MatrixCalculator {
         sum+=s*matrix[0][i]*(determinant(smaller)); steps.add("Current sum: " + sum); //recursive step: determinant of larger determined by smaller.
       }
     }
+    steps.add("Determinant: " + sum);
     return(sum); //returns determinant value. once stack is finished, returns final determinant.
   }
   
@@ -133,6 +134,9 @@ public class MatrixCalculator {
     if(inverse.getMatrix().length == inverse.getMatrix()[0].length) {
       double det = determinant(getMatrix().getMatrix());
       System.out.println(det);
+      steps.clear();
+      steps.add("Adjoint:<br>"+ inverse.transpose().toString());
+      steps.add("Determinant: " + det +"<br> The inverse is equal to the adjoint matrix times the determinant.");
       for(int i = 0; i < inverse.getRowCount(); i++) {
         for(int j = 0; j < inverse.getColumnCount(); j++) {
           inverse.getMatrix()[i][j] /= det;
@@ -149,17 +153,13 @@ public class MatrixCalculator {
       if(!temp.isColumnZeroes(i)) { // ensures column is not all zeroes
         steps.add("Swap rows " + (i+1) + " and " + (temp.getHighest(i) + 1)); count++; steps.add(temp.toString());
         temp.swapRows(i, temp.getHighest(i)); // swaps ith row with row with highest first elt
-        //if ( i !=  temp.getHighest(i))
-          
         int index = temp.getNonZero(i);
         steps.add("Scale row " + (i+1) + " by " + temp.getMatrix()[i][index]); count++; steps.add(temp.toString());
-        temp.scaleRow(i, temp.getMatrix()[i][index]); // scales the ith row by value of first element
-        //if ( i !=  temp.getMatrix()[i][index])
-          
+        temp.scaleRow(i, temp.getMatrix()[i][index]); // scales the ith row by value of first element 
       }
     }
     System.out.println(temp);
-    temp.nuke();
+    temp.removeDuplicateRows();
     temp.removeRowZeroes();
     return temp;  
   }
