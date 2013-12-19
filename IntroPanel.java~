@@ -1,16 +1,20 @@
 import java.awt.*;
 import javax.swing.*;
-
+/*
+* Intro panel. Explains the program and how to use all the features. 
+* 
+* @author Sravanti Tekumalla
+*/ 
 public class IntroPanel extends JPanel
 {
-   //-----------------------------------------------------------------
-   //  Sets up this panel with two labels.
-   //-----------------------------------------------------------------
+    /** 
+   * Class constructor.
+   */
    public IntroPanel()
    {
       setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-      setBackground(new Color(206, 239, 242));
-
+      
+      //initialize labels to add to panel
       JLabel l1 = new JLabel ("<html><h1 style ='font-family:Marker felt;color:#33CC33;font-size:36px;align:center'>Matrix Calculator</h1>");
       JLabel imgLabel = new JLabel(new ImageIcon("underline.gif"));
       JLabel l2 = new JLabel ("<html><p style ='font-family:Marker felt;color:#3399FF;font-size:16px;align:center'><i>Because matrix calculations suck let's be real here" 
@@ -25,6 +29,7 @@ public class IntroPanel extends JPanel
       JLabel l5 = new JLabel("<html><h4 style ='font-family:Marker felt;color:#3399FF;font-size:12px;align:center'>Created by Sravanti Tekumalla and Su Lin Blodgett</h4></html>");                       
                               
 
+      //add labels to panel
       add (l1);
       add(imgLabel);
       add (l2);

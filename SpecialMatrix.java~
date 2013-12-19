@@ -1,14 +1,14 @@
-//import javafoundations.*;
+import javafoundations.*;
 import java.util.*;
 
 public class SpecialMatrix {
   
   private MatrixCalculator reduced;
   private LinkedList<String> properties;
-  //private LinkedBinaryTree<String> t1, t2, t3, t4, t5, t6, t7, t8, t9;
+  private LinkedBinaryTree<String> t0, t1, t2, t3, t4, t5, t6, t7, t8, t9;
   
   public SpecialMatrix(Matrix m) {
-    reduced = new MatrixCalculator(m);
+    reduced = new MatrixCalculator(m.getRowCount(), m.getColumnCount());
     reduced.REF();
     properties = new LinkedList<String>();
     

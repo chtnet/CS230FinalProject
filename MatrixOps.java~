@@ -28,15 +28,7 @@ public interface MatrixOps
    */
   public double getEntry(int i, int j);
   
-  
-  /**
-   * Sets entry in a matrix based on given row and column index.
-   * 
-   * @param i  the row index
-   * @param j  the column index
-   */
-  protected void setEntry(int i, int j, double k);
-  
+ 
   /**
    * Gets the number of rows in the matrix.
    * 

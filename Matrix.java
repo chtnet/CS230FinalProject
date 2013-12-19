@@ -300,7 +300,35 @@ public class Matrix implements MatrixOps
     return true; 
   }
   
+  /**
+   * Returns a matrix whose every entry is the negative of the entry of the original.
+   * 
+   * @return double[][]
+   */
+  public double[][] negMatrix() {
+    double[][] temp = matrix.clone();
+    for(int i = 0; i < matrix.length; i++) {
+      for(int j = 0; j < matrix[0].length; j++) {
+        temp[i][j] = -matrix[i][j];
+      }
+    }
+    return temp;
+  }
   
+  /**
+   * Checks if two matrices are equal by checking every entry
+   * 
+   * @return boolean if matrices are equal
+   */
+  public boolean equals(Matrix m) {
+    for(int i = 0; i < matrix.length; i++) {
+      for(int j = 0; j < matrix[0].length; j++) {
+        if(matrix[i][j] != m.getMatrix()[i][j]) return false;
+      }
+    }
+    return true;
+  }
+   
   /**
    * Returns a string repesenation of the Matrix object
    * 

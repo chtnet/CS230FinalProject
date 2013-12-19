@@ -25,12 +25,14 @@ public class MatrixCalculatorGUI
    {
       JFrame frame = new JFrame ("Matrix Calculator");
       frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
+      frame.setPreferredSize(new Dimension(1024, 768));
 
       JTabbedPane tp = new JTabbedPane();
-      CalculatorPanel cp = new CalculatorPanel(); //to communicate results of calculatorPanel to termsPanel
+      TermsPanel terms = new TermsPanel();
+      CalculatorPanel cp = new CalculatorPanel(terms); //to communicate results of calculatorPanel to termsPanel
       tp.addTab ("Intro", new IntroPanel());
       tp.addTab ("Calculator", cp);
-      tp.addTab ("Terms", new TermsPanel(cp));
+      tp.addTab ("Terms", terms);
       frame.getContentPane().add(tp);
 
       frame.pack();

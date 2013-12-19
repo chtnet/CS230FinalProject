@@ -1,0 +1,15 @@
+<html><p style ='font-family:Marker felt;font-size:16px;text-decoration:underline'>Original matrix:</p>
+1.0 2.0 3.0 <br>4.0 5.0 6.0 <br>7.0 8.0 10.0 <br>
+<html><p style ='font-family:Marker felt;font-size:16px;text-decoration:underline'>Steps:</p>
+Swap rows 1 and 3
+1.0 2.0 3.0 <br>4.0 5.0 6.0 <br>7.0 8.0 10.0 <br>
+Scale row 1 by 7.0
+7.0 8.0 10.0 <br>4.0 5.0 6.0 <br>1.0 2.0 3.0 <br>
+Swap rows 2 and 2
+1.0 1.1428571428571428 1.4285714285714286 <br>4.0 5.0 6.0 <br>1.0 2.0 3.0 <br>
+Scale row 2 by 4.0
+1.0 1.1428571428571428 1.4285714285714286 <br>4.0 5.0 6.0 <br>1.0 2.0 3.0 <br>
+Swap rows 3 and 3
+1.0 1.1428571428571428 1.4285714285714286 <br>1.0 1.25 1.5 <br>1.0 2.0 3.0 <br>
+Scale row 3 by 1.0
+1.0 1.1428571428571428 1.4285714285714286 <br>1.0 1.25 1.5 <br>1.0 2.0 3.0 <br>

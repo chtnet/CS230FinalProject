@@ -10,14 +10,7 @@ import java.util.*;
 public interface MatrixOps 
 {
 
-  /**
-   * Clones Matrix object.
-   * 
-   * @return Matrix of clone
-   */
-  public Matrix clone();
-  
-  
+ 
   /**
    * Gets entry in a matrix based on given row and column index.
    * 

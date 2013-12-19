@@ -1,12 +1,3 @@
-/**
- * Intro Panel which displays instructions for how to use Matrix Calculator.
- * 
- * @author Sravanti Tekumalla
- */
-
-
-
-
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -15,28 +6,42 @@ import java.io.*;
 
 
 
+/**
+ * Calculator panel. Allows user to input values for a matrix or to import a text file with comma-separated values.
+ * Displays calculations performed in MatrixCalculator in GUI.
+ * 
+ * @author Sravanti Tekumalla
+ */
 
 public class CalculatorPanel extends JPanel
 {
   
-  private JComboBox m, n, calculation;
+  private JComboBox dimension, calculation;
   private JButton enter, calculate, importMatrix, enterValues, clear, showSteps;
   private int mValue, nValue;
-  private JPanel matrixPanel, settingsPanel, southPanel, resultsPanel, centerPanel;
+  private JPanel matrixPanel, settingsPanel, southPanel, centerPanel;
   private MatrixCalculator mc;
+  private SpecialMatrix sm;
+  private TermsPanel tp;
   private JTextField[][] textFields;
+
   
-  //-----------------------------------------------------------------
-  //  Sets up this panel with two labels.
-  //-----------------------------------------------------------------
-  public CalculatorPanel()
+  /** 
+   * Class constructor.
+   */
+  public CalculatorPanel(TermsPanel tp)
   {
-    
+   
+    this.tp = tp;
+    //sets up layout
     setLayout (new BorderLayout());
-    //setBackground(new Color(206, 239, 242));
+    setBackground(new Color(82, 217, 141));
+    //initialize panels for layout
+    matrixPanel = new JPanel(); matrixPanel.setBackground(new Color(82, 217, 141));
+    settingsPanel = new JPanel(); settingsPanel.setLayout(new GridLayout(5,1)); settingsPanel.setBackground(new Color(82, 217, 141));
+    southPanel = new JPanel(); southPanel.setBackground(new Color(82, 217, 141));
     
-    
-    //String info for combo boxes
+    //create and initialize information for combo boxes
     String[] items = new String [6];
     items [0] = "---";
     items [1] = "1";
@@ -44,14 +49,6 @@ public class CalculatorPanel extends JPanel
     items [3] = "3";
     items [4] = "4";
     items [5] = "5";
-    m = new JComboBox (items);  
-    m.addItemListener(new ItemChangeListener());
-    n = new JComboBox (items);
-    n.addItemListener(new ItemChangeListener());
-    m.setPreferredSize(new Dimension(10,20));
-    n.setPreferredSize(new Dimension(10,20));
-    
-    
     
     String[] items2 = new String[5];
     items2[0] = "---";
@@ -60,79 +57,107 @@ public class CalculatorPanel extends JPanel
     items2[3] = "Inverse";
     items2[4] = "Determinant";
     
+    dimension = new JComboBox (items);  
+    //n = new JComboBox (items);
     calculation = new JComboBox(items2);
-    calculation.addActionListener(new ButtonListener());
-    matrixPanel = new JPanel();
-    settingsPanel = new JPanel();
-    resultsPanel = new JPanel();
-    resultsPanel.setLayout (new BoxLayout (resultsPanel, BoxLayout.Y_AXIS));
-
-  
     
-    southPanel = new JPanel();
-    southPanel.setLayout(new FlowLayout());
+    //set up size
+    dimension.setPreferredSize(new Dimension(10,20));
+    //n.setPreferredSize(new Dimension(10,20));
+    
+    
+    //add listeners
+    dimension.addItemListener(new ItemChangeListener());
+    //n.addItemListener(new ItemChangeListener());
+    calculation.addActionListener(new ButtonListener());
+    
+    
+    //initialize buttons for south/west panel - includes HTML styling
     enter = new JButton("<html><p style ='font-family:Marker felt;color:#00CC00;font-size:15px;align:left'>Enter</p></html>");
     calculate = new JButton("<html><p style ='font-family:Marker felt;color:#00CC00;font-size:15px;align:left'>Calculate</p></html>");
-    calculate.addActionListener(new ButtonListener());
     importMatrix = new JButton("<html><p style ='font-family:Marker felt;color:#9900CC;font-size:16px;align:left'>Import matrix</p></html>");
-    importMatrix.addActionListener(new ButtonListener());
     clear = new JButton("<html><p style ='font-family:Marker felt;color:#FF0000;font-size:15px;align:left'>Clear</p></html>");
+    showSteps = new JButton("<html><p style ='font-family:Marker felt;color:#0066FF;font-size:13px;align:left'>Show me the steps!</p></html>");
+    
+    //add listeners for buttons 
     clear.addActionListener(new ButtonListener());
-    
-    
-    
-    
-    settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
-    settingsPanel.add(new JLabel("<html><p style ='font-family:Marker felt;color:#0066FF;font-size:13px;align:left'>Number of rows:</p></html>"));
-    settingsPanel.add(m);
-    settingsPanel.add(new JLabel("<html><p style ='font-family:Marker felt;color:#0066FF;font-size:13px;align:left'>Number of columns:</p></html>"));
-    settingsPanel.add(n);
-    settingsPanel.add(new JLabel("<html><p style ='font-family:Marker felt;color:#0066FF;font-size:13px;align:left'>Calculation</p></html>"));
-    settingsPanel.add(calculation);
-    settingsPanel.add(importMatrix);
-    
-    showSteps = new JButton("Show me the steps!");
+    calculate.addActionListener(new ButtonListener());
+    importMatrix.addActionListener(new ButtonListener());
     showSteps.addActionListener(new ButtonListener());
+    //steps cannot be initialized until a calculation is performed
+    showSteps.setVisible(false);
     showSteps.setEnabled(false);
     
+    //initialize and add labels for buttons for west panel (settings)
+    settingsPanel.add(new JLabel("<html><p style ='font-family:Marker felt;color:#0066FF;font-size:13px;align:left'>Dimension of matrix:</p></html>"));
+    settingsPanel.add(dimension);
+    settingsPanel.add(new JLabel("<html><p style ='font-family:Marker felt;color:#0066FF;font-size:13px;align:left'>Calculation</p></html>"));
+     settingsPanel.add(calculation);
+     settingsPanel.add(importMatrix);
+    //add top label
+    add (new JLabel("<html><h2 style ='font-family:Marker felt;color:#B20000;font-size:20px;align:center;text-decoration:underline;opacity:0.4'>"
+                      + "Enter the dimensions and values for your matrix below. Alternatively, import a matrix.</h2></html>"), BorderLayout.NORTH);
+    
+    
+    //add labels and buttons to south panel
     southPanel.add(clear);
     southPanel.add(calculate);
     southPanel.add(showSteps);
-    
-    
-    //southPanel.setBackground(new Color(206, 239, 242));
-    
-    
+    //add top label
     add (new JLabel("<html><h2 style ='font-family:Marker felt;color:#B20000;font-size:20px;align:center;text-decoration:underline'>"
                       + "Enter the dimensions and values for your matrix below. Alternatively, import a matrix.</h2></html>"), BorderLayout.NORTH);
+    
+    //add panels to layout
     add (matrixPanel, BorderLayout.CENTER);
     add (settingsPanel, BorderLayout.WEST);
     add (southPanel, BorderLayout.SOUTH);
-    
-    
-    //add (resultsPanel, BorderLayout.EAST);
-    
-    
+ 
   }
   
+  
+  //section: helper methods
+  
+  /**
+   * Helper method that obtains the Matrix Calculator used in Calculator Panel.
+   */ 
+  
+  public MatrixCalculator getMC() {
+   return mc; 
+  }
+  /**
+   * Helper method to create a panel of the matrix displayed in a clean grid format. Used for center portion of CalculatorPanel.
+   */ 
   private JPanel matrixLabel(Matrix matrix) {
     JPanel grid = new JPanel();
-    grid.setLayout(new GridLayout(matrix.getRowCount(), matrix.getColumnCount()));
-//   String html = "<html><h2 style ='font-family:Marker felt;font-size:20px;align:center'>Matrix result</h1></html>"
-//     + "<p style ='font-family:Marker felt;font-size:16px;align:center'>";
+    //creates grid that has same dimensions of matrix
+    grid.setLayout(new GridLayout(matrix.getRowCount(), matrix.getColumnCount())); 
     for(int i = 0; i < matrix.getRowCount(); i++) {
       for (int j = 0; j < matrix.getColumnCount(); j++) {
         grid.add(new JLabel( matrix.getEntry(i, j) + "  "));
-      }
-      
+      } 
     }
     return grid;
   }
   
+  
+    /**
+   * Helper method to read in imported matrix and create a matrix based on imported values. 
+   * Values must be 
+   * Then proceeds to get information from user about what calculation needs to be performed.
+   * Updates the GUI accordingly. 
+   * 
+   * @throws FileNotFoundException
+   */ 
   private void readIn(String textfile) {
     try {
+      
+      //creates reader to read in imported file
       Scanner reader = new Scanner(new File(textfile));
+     
+      //finds dimensions of matrix
       fileDimensions(textfile);
+      
+      //creates matrix calculator based on imported values
       mc = new MatrixCalculator(mValue, nValue);
       for (int i = 0; reader.hasNextLine(); i++) {
         String[] nValues = reader.nextLine().split(",");
@@ -141,8 +166,7 @@ public class CalculatorPanel extends JPanel
         }
       }
       
-      System.out.println(mc.getMatrix());
-      
+      //initialize combo box for popup pane
       String[] items2 = new String[5];
       items2[0] = "---";
       items2[1] = "Row EF";
@@ -150,16 +174,25 @@ public class CalculatorPanel extends JPanel
       items2[3] = "Inverse";
       items2[4] = "Determinant";
       String picked = (String)JOptionPane.showInputDialog(this, "Pick which Calculation:","Choose calculation",JOptionPane.QUESTION_MESSAGE ,null,items2,items2[0]);
-      System.out.println("PICKED: " + picked);
+    
+      //perform calculation based on chosen value by user
       calculate(picked);
+      
+      //catches exception if user types in file that does not exist
     } catch (FileNotFoundException e) {
       JOptionPane.showMessageDialog(null,  "File not found. Please make sure file name is typed in correctly and includes extension .txt.", "File not found", JOptionPane.WARNING_MESSAGE);
     }  
   }
   
+    /**
+   * Helper method to find dimensions of imported matrix.
+   * 
+   * @throws FileNotFoundException
+   */ 
   private void fileDimensions(String textFile) {
     try {
       Scanner reader = new Scanner(new File(textFile));
+      
       System.out.println(Arrays.toString(reader.next().split(",")));
       mValue = reader.next().split(",").length;
       System.out.println(mValue);
@@ -172,17 +205,29 @@ public class CalculatorPanel extends JPanel
     
   }
   
+    /**
+   * Helper method to clear matrix calculator data and clear GUI.
+   * 
+   */ 
   private void clear() {
-      matrixPanel.removeAll();
-        m.setSelectedIndex(0);
-        n.setSelectedIndex(0);
-        calculation.setSelectedIndex(0);
-        mc = null;
-        matrixPanel.repaint(); 
+    //updates GUI
+    tp.getPropertiesPanel().removeAll();
+    matrixPanel.removeAll();
+    //resets combo boxes
+    dimension.setSelectedIndex(0);
+    calculation.setSelectedIndex(0);
+    mc = null;
+    
     
   }
   
+   /**
+   * Helper method to calculate information about matrix based on user input.
+   * 
+   * @throws NumberFormatException
+   */ 
   private void calculate(String s) {
+    //makes sure user has selected calculation
     if(s == "---")
       JOptionPane.showMessageDialog(null, "Please enter which calculation you would like to perform", "Error", JOptionPane.ERROR_MESSAGE);
     
@@ -190,111 +235,123 @@ public class CalculatorPanel extends JPanel
       if(textFields != null) {
         for(int i = 0; i < mValue; i++) {
           for(int j = 0; j < nValue; j++) {
-             try {
-            System.out.println(textFields[i][j]);
-            mc.getMatrix().setEntry(i, j, Double.parseDouble(textFields[i][j].getText())); 
-            System.out.println((double)Double.valueOf(textFields[i][j].getText()));
+            try {
+              mc.getMatrix().setEntry(i, j, Double.parseDouble(textFields[i][j].getText()));
+              //makes sure entries are valid numbers (no complex numbers a+bi)
+              //clears matrix if entries are not correct and exits method (program freezes otherwise)
             } catch (NumberFormatException e) {
               JOptionPane.showMessageDialog(null, "Please enter a valid integer for every field (does not accept complex numbers)", "Error", JOptionPane.ERROR_MESSAGE);
               clear(); return;
             }
           }
-        }
-      }
-      if (s.equals("Row EF")) {
-        matrixPanel.removeAll();
-        matrixPanel.repaint();
-        add(matrixLabel(mc.REF(mc.getMatrix())), BorderLayout.CENTER);
-        
-        
-        
-      }
-      
-      if (s.equals("Column-Reduced EF")) {
-        matrixPanel.removeAll();
-        matrixPanel.repaint();
-        add(matrixLabel(mc.CREF(mc.getMatrix())), BorderLayout.CENTER);
-        
-      }
     
+        }
+        
+        //updates terms panel according to matrix entered
+        sm = new SpecialMatrix(mc.getMatrix());
+        tp.setProperties(sm.getProperties());
+      }
       
+      //clears matrix in GUI to populate with calculation result
+      matrixPanel.removeAll();
+      //matrixPanel.repaint();
+      
+      //performs appropriate calculation and updates GUI based on chosen calculation
+      if (s.equals("Row EF")) 
+        add(matrixLabel(mc.REF()), BorderLayout.CENTER);
+      if (s.equals("Column-Reduced EF")) 
+        add(matrixLabel(mc.CREF()), BorderLayout.CENTER); 
       if (s.equals("Inverse")) {
-        matrixPanel.removeAll();
-        matrixPanel.repaint();
+        //checks to make sure matrix is square - inverse does not exist otherwise
         if(mc.getMatrix().getRowCount() != mc.getMatrix().getColumnCount()) matrixPanel.add(new JLabel("Inverse could not be calculated because the matrix is not square."));
         else add(matrixLabel(mc.inverse()), BorderLayout.CENTER);
-        
-        
-      }
-      
+      }  
       if (s.equals("Determinant")) {
-        matrixPanel.removeAll();
-        matrixPanel.repaint();
+        //label instead of panel because determinant is an int value, not a matrix.
         JLabel result = new JLabel();
-         System.out.println("Y NULLPOINTER EXCEPTION Y\n" + Arrays.toString(mc.getMatrix().getMatrix()));
+        //checks to make sure matrix is square - determinant is 0 otherwise
         if(mc.getMatrix().getRowCount() != mc.getMatrix().getColumnCount())   result = new JLabel("Determinant could not be calculated because the matrix is not square.");
         else  result = new JLabel(String.valueOf(mc.determinant(mc.getMatrix().getMatrix())));
-       
         matrixPanel.add(result);
+        matrixPanel.setBackground(new Color(82, 217, 141));
         add(matrixPanel, BorderLayout.CENTER);
+        setComponentZOrder(matrixPanel, 0);
       }
+      //now users can see the steps of their calculation if desired
+      showSteps.setVisible(true);
       showSteps.setEnabled(true); 
-    }
-    
-    
+    }  
   }
   
+  //section: listeners
+  
+  
+  
+  /**
+ * Implements Listeners for buttons for GUI.
+ *
+ */
   private class ButtonListener implements ActionListener {
     
     public void actionPerformed (ActionEvent event) {
+      //if user selects "Import Matrix"
       if(event.getSource() == importMatrix) {
-         System.out.println("Importing");
-        readIn(new String( JOptionPane.showInputDialog("Enter text file name to import matrix; file must be located in same directory." + "\n"
-                                                         + "Also note that entries on the same line (e.g. within the same row" + "\n"
+        //obtain file name, read in values and figure out appropriate calculation
+        readIn(new String( JOptionPane.showInputDialog("Enter text file name to import matrix; file must be located in same directory.\n"
+                                                         + "Also note that entries on the same line (e.g. within the same row\n"
                                                          + "should be separated by integers.")));
-      
-        
       }
       if(event.getSource() == calculate) {
+        //calculate based on user selection
         calculate((String)calculation.getSelectedItem());
       }
       
       if(event.getSource() == clear) {
-       clear();
-        
+        //resets matrix calculator and GUI
+        clear(); 
       }
       
       if (event.getSource() == showSteps) {
-        
-        
+        //initializes Steps Panel which stores calculation steps
         StepsPanel sp = new StepsPanel(mc);
+        //creates a new frame for popup
         JFrame stepsFrame = new JFrame ("Steps");
-        JScrollPane scroller = new JScrollPane(sp);  
-        stepsFrame.getContentPane().add(scroller, BorderLayout.CENTER); 
         stepsFrame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
         stepsFrame.getContentPane().add(sp);
         stepsFrame.pack();
         stepsFrame.setVisible(true);
-        
-        
+        //attempt to add scroller to pane so user can view all steps (BUG: DOES NOT WORK CURRENTLY)
+        JScrollPane scroller = new JScrollPane(sp);  
+        stepsFrame.getContentPane().add(scroller, BorderLayout.CENTER); 
       }
     }
   }
   
+  /**
+ * Implements Listeners for combo boxes for GUI.
+ * Note: Does not use ButtonListener because only ItemListener has 
+ * ability to see if item selected is different from before
+ *
+ */
+  
   private class ItemChangeListener implements ItemListener{
     public void itemStateChanged(ItemEvent event) {
       
+      //in case user selects values for column and row lengths and then changes their mind
       if (event.getStateChange() == ItemEvent.SELECTED) {
-        if(n.getSelectedItem() != "---" && m.getSelectedItem() != "---")
+        if(dimension.getSelectedItem() != "---")
         {
+          //reset panel
           matrixPanel.removeAll();
           matrixPanel.repaint();
-          mValue = Integer.valueOf((String)m.getSelectedItem());
-          nValue = Integer.valueOf((String)n.getSelectedItem());
+          
+          //figure out updated values and create new matrix calculator accordingly
+          mValue = Integer.valueOf((String)dimension.getSelectedItem());
+          nValue = Integer.valueOf((String)dimension.getSelectedItem());
           mc = new MatrixCalculator(mValue, nValue);
-          System.out.println("MATRIX\n" + mc.getMatrix());
+          //initialize textfields for user input for matrix values
           textFields = new JTextField[mValue][nValue];
-          System.out.println("TEXTFIELDS\n" + textFields);
+          //set up GUI, initializes all values to be 0 
           matrixPanel.setLayout(new GridLayout(mValue, nValue));
           for(int i = 0; i < mValue; i++) {
             for(int j = 0; j < nValue; j++) {

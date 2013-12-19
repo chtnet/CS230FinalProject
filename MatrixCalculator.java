@@ -6,20 +6,57 @@ public class MatrixCalculator {
   private LinkedList<String> steps = new LinkedList<String>();
   private int count;
   
+  /**
+   * Class constructor specifying number of rows and columns.
+   */
   public MatrixCalculator(int m, int n)
   {
     matrix = new Matrix(m,n); 
     steps = new LinkedList<String>();
   } 
   
-  public Matrix getMatrix() {
-    return matrix; 
-    
+  /**
+   * Class constructor.
+   */
+  public MatrixCalculator(Matrix m) {
+    matrix = m;
+    steps = new LinkedList<String>();
   }
   
+  /**
+   * Returns associated matrix.
+   * 
+   * @return Matrix
+   */
+  public Matrix getMatrix() {
+    return matrix; 
+  }
+  
+  /**
+   * Returns list of steps.
+   * 
+   * @return LinkedList of steps
+   */
   public LinkedList<String> getSteps() {
    return steps; 
-    
+  }
+  
+  /** 
+   * Returns row count of associated matrix.
+   * 
+   * @return int of rows in matrix
+   */
+  public int getRowCount() {
+    return matrix.getRowCount();
+  }
+  
+  /** 
+   * Returns column count of associated matrix.
+   * 
+   * @return int of columns in matrix
+   */
+  public int getColumnCount() {
+    return matrix.getColumnCount(); 
   }
   
   
@@ -46,6 +83,12 @@ public class MatrixCalculator {
 //    return sum;
 //  }
   
+  /**
+   * Calculates determinant of a given matrix.
+   * 
+   * @param  matrix  array associated with the matrix
+   * @return double  the calculated determinant
+   */
   public double determinant(double[][] matrix){ //method sig. takes a matrix (two dimensional array), returns determinant.
     int sum=0; 
     int s;
@@ -84,6 +127,13 @@ public class MatrixCalculator {
   
   
   
+  /**
+   * Creates a submatrix of a given matrix that excludes the mth row and nth column.
+   * 
+   * @param  m  integer index of row to be excluded
+   * @param  n  integer index of column to be excluded
+   * @return Matrix  smaller resulting matrix
+   */
   private Matrix minorMatrix(int m, int n) //creates submatrix excluding mth row and nth column
   {
     
@@ -105,6 +155,12 @@ public class MatrixCalculator {
     return minor; 
   }
   
+  /* Calculates the cofactor (the determinant) of the minor (the submatrix) of a matrix. 
+   * 
+   * @param  m  integer index of row to be excluded
+   * @param  n  integer index of row to be included
+   * @param  double  the calculated cofactor
+   */
   private double cofactor(int m, int n) {
     Matrix minor = minorMatrix(m, n);
     double cofactor = determinant(minor.getMatrix());
@@ -114,8 +170,12 @@ public class MatrixCalculator {
     
   }
   
-  
-  
+  /**
+   * Calculates and returns the transpose of the cofactor matrix (the matrix of the cofactors 
+   * of a given matrix.
+   * 
+   * @return Matrix  the calculated adjoint matrix
+   */
   public Matrix adjoint()
   {
     double[][] temp = matrix.getMatrix();
@@ -129,6 +189,11 @@ public class MatrixCalculator {
     return adj.transpose();
   }
   
+  /**
+   * Calculates and returns the inverse of the associated matrix.
+   * 
+   * @return Matrix  the inverse of the matrix
+   */
   public Matrix inverse() {
     Matrix inverse = adjoint();
     if(inverse.getMatrix().length == inverse.getMatrix()[0].length) {
@@ -146,8 +211,14 @@ public class MatrixCalculator {
     return inverse;
   }
   
-  public Matrix REF(Matrix matrix)
+  /**
+   * Calculates and returns the reduced echelon form of the associated matrix.
+   * 
+   * @return Matrix  reduced echelon form of the matrix
+   */
+  public Matrix REF()
   {
+    
     Matrix temp = matrix.clone();
     for(int i = 0; i < temp.getMatrix()[0].length; i++) {
       if(!temp.isColumnZeroes(i)) { // ensures column is not all zeroes
@@ -164,27 +235,55 @@ public class MatrixCalculator {
     return temp;  
   }
   
-  public Matrix RREF(Matrix matrix)
+  /**
+   * Takes each row below the given row and multiplies and adds it by the given row.
+   * 
+   * @param  m  integer index of the row below which every row is multiplied and added
+   */
+  private void scaleAll(int m) {
+    for(int i = 0; i < matrix.getRowCount(); i++) {
+      steps.add("Multiply row " + (i+1) + "by " + matrix.getMatrix()[m][i] + " and subtract from row " + (m+1));
+      matrix.multiplyAndAdd(m, i, matrix.getMatrix()[m][i]);
+    } 
+  }
+  
+  /**
+   * Calculates and returns the reduced row echelon form of the associated matrix.
+   * 
+   * @return Matrix  the reduced row echelon form of a matrix
+   */
+  public Matrix RREF()
   {
-    Matrix temp = REF(matrix);
+    Matrix temp = REF();
     for(int i = 0; i < temp.getMatrix().length; i++) {
-      temp.scaleRow(i, matrix.getNonZero(i));
-      steps.add("Scale row " + i + " by " + matrix.getNonZero(i)); steps.add(temp.toString());
+      scaleAll(i);
     }
     System.out.println("RREF\n" + temp);
+    temp.removeDuplicateRows();
+    temp.removeRowZeroes();
     return temp;
   }
   
-  public Matrix CREF(Matrix matrix)
+  /**
+   * Calculates and returns the column reduced echelon form of a matrix, which is found by
+   * transposing a matrix, taking its reduced row echelon form, and transposing again.
+   * 
+   * @return Matrix  the column reduced echelon form of a matrix
+   */
+  public Matrix CREF()
   {
     steps.clear();
     Matrix temp = matrix.transpose();
-    temp = RREF(matrix);
+    temp = RREF();
     temp.transpose();
     return temp;
   }
   
-
+  /**
+   * Returns a string repesenation of the MatrixCalculator object
+   * 
+   * @return String  string representation of MatrixCalculator object
+   */
   public String toString() {
     return matrix.toString();
     
@@ -218,14 +317,14 @@ public class MatrixCalculator {
     fourth.matrix.setEntry(2,2,15.0/4.0);
     System.out.println("The fourth matrix:\n" + fourth.matrix);
     System.out.println("Inverse: " + fourth.inverse());
-    Matrix matrix = fourth.REF(fourth.matrix);
+    Matrix matrix = fourth.RREF();
     
     
     
-    MatrixCalculator five = new MatrixCalculator(2,2);
+    MatrixCalculator five = new MatrixCalculator(3,3);
     
     five.matrix.setEntry(0,0, 1);
-    five.matrix.setEntry(0,1,2);
+    five.matrix.setEntry(0,1,1);
     five.matrix.setEntry(1,0, 3);
     five.matrix.setEntry(1,1,4);
     System.out.println(five.matrix);
