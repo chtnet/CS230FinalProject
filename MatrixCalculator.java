@@ -164,7 +164,6 @@ public class MatrixCalculator {
   private double cofactor(int m, int n) {
     Matrix minor = minorMatrix(m, n);
     double cofactor = determinant(minor.getMatrix());
-    System.out.println("cofactor "+ cofactor);
     if((m+n) %2 == 1) cofactor = - cofactor;
     return cofactor;
     
@@ -185,12 +184,13 @@ public class MatrixCalculator {
         adj.setEntry(i, j, cofactor(i,j));
       }
     }
-    System.out.println(adj);
     return adj.transpose();
   }
   
   /**
    * Calculates and returns the inverse of the associated matrix.
+   * The inverse is calculated by calculating the adjoint matrix 
+   * and dividing that matrix by the determinant. 
    * 
    * @return Matrix  the inverse of the matrix
    */
@@ -198,7 +198,6 @@ public class MatrixCalculator {
     Matrix inverse = adjoint();
     if(inverse.getMatrix().length == inverse.getMatrix()[0].length) {
       double det = determinant(getMatrix().getMatrix());
-      System.out.println(det);
       steps.clear();
       steps.add("Adjoint:<br>"+ inverse.transpose().toString());
       steps.add("Determinant: " + det +"<br> The inverse is equal to the adjoint matrix times the determinant.");
@@ -229,7 +228,6 @@ public class MatrixCalculator {
         temp.scaleRow(i, temp.getMatrix()[i][index]); // scales the ith row by value of first element 
       }
     }
-    System.out.println(temp);
     temp.removeDuplicateRows();
     temp.removeRowZeroes();
     return temp;  
@@ -242,7 +240,8 @@ public class MatrixCalculator {
    */
   private void scaleAll(int m) {
     for(int i = 0; i < matrix.getRowCount(); i++) {
-      steps.add("Multiply row " + (i+1) + "by " + matrix.getMatrix()[m][i] + " and subtract from row " + (m+1));
+      steps.add("Multiply row " + (i+1) + " by " + matrix.getMatrix()[m][i] + " and subtract from row " + (m+1) + "<br>");
+      steps.add(matrix.toString() + "<br>");
       matrix.multiplyAndAdd(m, i, matrix.getMatrix()[m][i]);
     } 
   }

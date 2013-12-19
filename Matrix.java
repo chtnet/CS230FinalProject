@@ -199,7 +199,6 @@ public class Matrix implements MatrixOps
   public void multiplyAndAdd(int m, int n, double k) {
     for(int i = 0; i < matrix[0].length; i++) {
       matrix[n][i] *= k;
-      //System.out.println(matrix[n][i]*k);
       matrix[m][i] -= matrix[n][i];
       matrix[n][i] /= k;
     }
@@ -255,7 +254,6 @@ public class Matrix implements MatrixOps
     if(matrix.length != m) {
       for(int i = m+1; i < matrix.length; i++) {
         if(matrix[i][m] > matrix[highest][m]) highest = i;
-        System.out.println("i : " + i + " highest: " + highest);
       }
     } else highest = m;
     return highest;

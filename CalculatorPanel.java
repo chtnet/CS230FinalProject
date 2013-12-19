@@ -50,12 +50,13 @@ public class CalculatorPanel extends JPanel
     items [4] = "4";
     items [5] = "5";
     
-    String[] items2 = new String[5];
-    items2[0] = "---";
-    items2[1] = "Row EF";
-    items2[2] = "Column-Reduced EF";
-    items2[3] = "Inverse";
-    items2[4] = "Determinant";
+      String[] items2 = new String[6];
+      items2[0] = "---";
+      items2[1] = "Row Echelon Form";
+      items2[2] = "Row-reduced Echelon Form";
+      items2[3] = "Column-Reduced Echelon Form";
+      items2[4] = "Inverse";
+      items2[5] = "Determinant";
     
     dimension = new JComboBox (items);  
     //n = new JComboBox (items);
@@ -167,12 +168,13 @@ public class CalculatorPanel extends JPanel
       }
       
       //initialize combo box for popup pane
-      String[] items2 = new String[5];
+      String[] items2 = new String[6];
       items2[0] = "---";
-      items2[1] = "Row EF";
-      items2[2] = "Column-Reduced EF";
-      items2[3] = "Inverse";
-      items2[4] = "Determinant";
+      items2[1] = "Row Echelon Form";
+      items2[2] = "Row-reduced Echelon Form";
+      items2[3] = "Column-Reduced Echelon Form";
+      items2[4] = "Inverse";
+      items2[5] = "Determinant";
       String picked = (String)JOptionPane.showInputDialog(this, "Pick which Calculation:","Choose calculation",JOptionPane.QUESTION_MESSAGE ,null,items2,items2[0]);
     
       //perform calculation based on chosen value by user
@@ -257,9 +259,11 @@ public class CalculatorPanel extends JPanel
       //matrixPanel.repaint();
       
       //performs appropriate calculation and updates GUI based on chosen calculation
-      if (s.equals("Row EF")) 
+      if (s.equals("Row Echelon Form")) 
         add(matrixLabel(mc.REF()), BorderLayout.CENTER);
-      if (s.equals("Column-Reduced EF")) 
+      if (s.equals("Row-reduced Echelon Form")) 
+        add(matrixLabel(mc.RREF()), BorderLayout.CENTER); 
+      if (s.equals("Column-Reduced Echelon Form")) 
         add(matrixLabel(mc.CREF()), BorderLayout.CENTER); 
       if (s.equals("Inverse")) {
         //checks to make sure matrix is square - inverse does not exist otherwise
