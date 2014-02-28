@@ -61,18 +61,20 @@ On the third panel the properties associated with the matrix will be displayed, 
 <li>Determinant method: The determinant method does not currently take in the proper parameters. We originally wrote a recursive method which took in a Matrix object and calculated the determinant using the expansion by minors method. However, we kept receiving a stack overflow error due to the recursion not working properly, particularly with our getMatrix() method. We left in this method in the comments to show our thought process but implemented an alternative determinant method which takes in a double array (which is what a Matrix object consists of) instead of the  Matrix object itself. We also had to use a different algorithm to obtain the minor matrices instead of calling our minorMatrix() method. 
 </li><li>Row-Reduced Echelon Form: Currently, our RREF() method is broken, likely due to our scaling method. It worked in previous iterations, but currently returns a similar result to our REF() method. . As a result, CREF() is also broken because it relies on RREF().
 </li><li>scrollbar on steps panel: We attempted to implement a scrollbar for the steps panel for calculations that took many steps. However, this did not show up in the panel. The code remains in CalculatorPanel.java. 
-<li><li>Future improvements:Nonsquare matrices: Currently, Matrix Calculator only takes in matrices with square dimensions. While most calculations beginners will try to do are for square matrices, it can be limiting. Implementing our calculations for nonsquare matrices requires a more complex algorithm that would be nice to implement in the future. 
+</li><li>Future improvements:Nonsquare matrices: Currently, Matrix Calculator only takes in matrices with square dimensions. While most calculations beginners will try to do are for square matrices, it can be limiting. Implementing our calculations for nonsquare matrices requires a more complex algorithm that would be nice to implement in the future. 
 </li></ul>
 
 <h3>Division of Labor:</h3>
-Sravanti Tekumalla and Su Lin Blodgett worked on the algorithms for MatrixCalculator.java and implemented MatrixOps in Matrix.java together. Su Lin implemented SpecialMatrix.java while Sravanti implemented the Graphical User Interface (GUI). A more specific breakdown:
-
-Matrix.java - Sravanti and Su Lin
-MatrixCalculator.java - Sravanti and Su Lin
-SpecialMatrix.java -Su Lin
-MatrixCalculatorGUI.java - Sravanti. Includes: 
-IntroPanel.java 
-CalculationPanel.java 
-TermsPanel.java 
-StepsPanel.java
+Sravanti Tekumalla and Su Lin Blodgett worked on the algorithms for MatrixCalculator.java and implemented MatrixOps in Matrix.java together. 
+Su Lin implemented SpecialMatrix.java while Sravanti implemented the Graphical User Interface (GUI). A more specific breakdown:
+<ul>
+<li>Matrix.java - Sravanti and Su Lin
+</li><li>MatrixCalculator.java - Sravanti and Su Lin
+</li><li>SpecialMatrix.java -Su Lin
+</li><li>MatrixCalculatorGUI.java - Sravanti. Includes: <ul>
+<li>IntroPanel.java 
+</li><li>CalculationPanel.java 
+</li><li>TermsPanel.java 
+</li><li>StepsPanel.java</li></ul>
+</li></ul>
 
