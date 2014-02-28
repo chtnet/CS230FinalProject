@@ -1,3 +1,4 @@
+
 /**
  * Steps Panel which displays steps based on chosen matrix calculation. 
  * This panel is implemented in a new frame opened when a user selects "Show me the steps!" after choosing a matrix calculation 

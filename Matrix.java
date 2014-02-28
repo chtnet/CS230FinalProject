@@ -1,10 +1,11 @@
 /**
- * This is a representation of the Matrix object and includes all operations performed on a matrix
- * Includes the three elementary row operations: scale rows, multiply and add one row to another and to swtich rows.
+ * This is a representation of the Matrix object and includes all operations performed on a matrix.
+ * Includes the three elementary row operations: scale rows, multiply and add one row to another and to switch rows.
  * 
  * @author Sravanti Tekumalla
  * @author Su Lin Blodgett
  */
+
 import java.util.*;
 
 public class Matrix implements MatrixOps
@@ -93,7 +94,6 @@ public class Matrix implements MatrixOps
     return columnCount;
   }
   
-  
   /**
    * Gets the double array containing the matrix entries
    * 
@@ -110,9 +110,9 @@ public class Matrix implements MatrixOps
    * @return Matrix transposed matrix
    */
   public Matrix transpose() {
-    Matrix transpose = new Matrix(matrix[0].length, matrix.length);
-    for(int i = 0; i < matrix[0].length; i++) {
-      for(int j = 0; j < matrix.length; j++)
+    Matrix transpose = new Matrix(getColumnCount(), getRowCount());
+    for(int i = 0; i < getColumnCount(); i++) {
+      for(int j = 0; j < getRowCount(); j++)
         transpose.matrix[i][j] = matrix[j][i];
     }
     return transpose;
@@ -124,31 +124,31 @@ public class Matrix implements MatrixOps
    * @param n the index of the row to be removed
    */
   public void removeRow(int n) {
-    for(int i = 0; i < matrix.length-1; i++) {
-      for(int j = 0; j < matrix[0].length; j++) 
+    for(int i = 0; i < getRowCount()-1; i++) {
+      for(int j = 0; j < getColumnCount(); j++) 
         matrix[i][j] = matrix[i+1][j]; 
     }
-    for(int j = 0; j < matrix[0].length; j++) {
-      matrix[matrix.length-1][j] = 0;
+    for(int j = 0; j < getColumnCount(); j++) {
+      matrix[getRowCount()-1][j] = 0;
     }
-    rowCount--;
-    
+    rowCount--;  
   }
   
+  /**
+   * Removes the specified column from the matrix. Reduces the number of rows by one.
+   * 
+   * @param n the index of the row to be removed
+   */
   public void removeColumn(int m) {
-    for(int i = 0; i < matrix.length; i++) {
-      for(int j = 0; j < matrix[0].length - 1; j++)
+    for(int i = 0; i < getRowCount(); i++) {
+      for(int j = 0; j < getColumnCount() - 1; j++)
         matrix[i][j] = matrix[i][j+1];
     }
-    for(int i = 0; i < matrix[0].length; i++) {
-      matrix[i][matrix[0].length-1] = 0;
+    for(int i = 0; i < getColumnCount(); i++) {
+      matrix[i][getColumnCount()-1] = 0;
     }
     columnCount--; 
   }
-  
-  
-  
-  
   
   /**
    * Switches the entries of one row with another row. 
@@ -158,28 +158,27 @@ public class Matrix implements MatrixOps
    * @param n the index of second row to be switched
    */
   public void swapRows(int m, int n) {
-    double[] temp = new double[matrix[0].length];
-    for(int i = 0; i < matrix[0].length; i++) {
+    double[] temp = new double[getColumnCount()];
+    for(int i = 0; i < getColumnCount(); i++) {
       temp[i] = matrix[m][i];
     }
-    for(int j = 0; j < matrix[0].length; j++) {
+    for(int j = 0; j < getColumnCount(); j++) {
       matrix[m][j] = matrix[n][j];
     }
-    for(int k = 0; k < matrix[0].length; k++) {
+    for(int k = 0; k < getColumnCount(); k++) {
       matrix[n][k] = temp[k];
     }
   }
   
   /**
-   * Switches the entries of one row with another row. 
-   * The order of the parameters doesn't matter.
+   * Scales a row by a factor.
    * 
-   * @param m the index of first row to be switched
-   * @param n the index of second row to be switched
+   * @param m the index of row to be scaled
+   * @param n the factor by which the row will be scaled
    */
   public void scaleRow(int m, double n) {
     try {
-      for(int i = 0; i < matrix[0].length; i++) {
+      for(int i = 0; i < getColumnCount(); i++) {
         matrix[m][i] = matrix[m][i]/n;
       }
     } catch(ArithmeticException e) {
@@ -188,19 +187,22 @@ public class Matrix implements MatrixOps
   }
   
   /**
-   * Excecutes the 3rd type of elementary row operation: 
-   * Multiplies ith row by a scalar and adds those values to the jth row.
-   * Leaves the ith row as it was before.
+   * Executes the 3rd type of elementary row operation: 
+   * Multiplies nth row by a scalar and subtracts those values from the mth row.
+   * Leaves the nth row as it was before.
+   * Assumes the scalar is not 0.
    * 
    * @param k the scalar to multiply the ith row
-   * @param m the index of the ith row to multiplied
-   * @param n the index of th jth row to add the values of the scaled ith row
+   * @param m the index of the row to multiplied
+   * @param n the index of th row to add the values of the scaled row
    */
   public void multiplyAndAdd(int m, int n, double k) {
-    for(int i = 0; i < matrix[0].length; i++) {
-      matrix[n][i] *= k;
+    for(int i = 0; i < getColumnCount(); i++) {
+      //matrix[n][i] *= k;
+      scaleRow(n, k);
       matrix[m][i] -= matrix[n][i];
-      matrix[n][i] /= k;
+      scaleRow(n, 1.0/k);
+      //matrix[n][i] /= k;
     }
   }
   
@@ -211,24 +213,21 @@ public class Matrix implements MatrixOps
    * @return boolean if the row is all zeroes
    */
   public boolean isRowZeroes(int m) {
-    for(int i = 0; i < matrix[0].length; i++) { 
+    for(int i = 0; i < getColumnCount(); i++) { 
       if(matrix[m][i] != 0) return false;
     }
     return true;
   }
   
-  
   /**
-   * Checks to see if the specified row consists of all zeroes. 
+   * Checks to see if the specified row consists of all zeroes and removes it. 
    * 
-   * @return boolean if the row is all zeroes
    */
   public void removeRowZeroes() {
-    for(int i = 0; i < matrix[0].length; i++) { 
+    for(int i = 0; i < getColumnCount(); i++) { 
       if(isRowZeroes(i)) removeRow(i);
     }
   }
-  
   
   /**
    * Checks to see if the specified column consists of all zeroes. 
@@ -237,22 +236,22 @@ public class Matrix implements MatrixOps
    * @return boolean if the colunn is all zeroes
    */
   public boolean isColumnZeroes(int m) {
-    for(int i = 0; i < matrix.length; i++) { 
+    for(int i = 0; i < getRowCount(); i++) { 
       if(matrix[i][m] != 0) return false;
     }
     return true;
   }
   
   /**
-   * Finds the highest int in a column 
+   * Finds the highest int in a column below it
    * 
    * @param m the int of the column to be checked
    * @return int of highest integer in the row
    */
   public int getHighest(int m) {
     int highest = m;
-    if(matrix.length != m) {
-      for(int i = m+1; i < matrix.length; i++) {
+    if(getRowCount() != m) {
+      for(int i = m+1; i < getRowCount(); i++) {
         if(matrix[i][m] > matrix[highest][m]) highest = i;
       }
     } else highest = m;
@@ -266,20 +265,23 @@ public class Matrix implements MatrixOps
    * @return int of the first nonzero int in the row
    */
   public int getNonZero(int m) {
-    for(int i = 0; i < matrix[0].length; i++) { 
+    for(int i = 0; i < getColumnCount(); i++) { 
       if(matrix[m][i] != 0) return i;
     }
     return -1;
   }
   
-  //search and destroy
+  /**
+   * Scales rows and then searches for and removes duplicate rows.
+   * 
+   */
   public void removeDuplicateRows() {
-    for (int i = 0; i < matrix.length; i++) {
-      if(getNonZero(i) > 0) //only scales the row if it's not all zeroes
+    for (int i = 0; i < getRowCount(); i++) {
+      if(getNonZero(i) >= 0) //only scales the row if it's not all zeroes
         scaleRow(i, matrix[i][getNonZero(i)]); 
     }
-    for (int j = 0; j < matrix.length-1; j++) {
-      for(int k = j+1; k < matrix.length; k++)
+    for (int j = 0; j < getRowCount()-1; j++) {
+      for(int k = j+1; k < getRowCount(); k++)
         if(rowEquals(j, k)) multiplyAndAdd(k, j, 1);    
     }
   }  
@@ -293,7 +295,7 @@ public class Matrix implements MatrixOps
    * @return boolean if the two rows are equal
    */
   public boolean rowEquals(int m, int n) {
-    for (int i = 0; i < matrix[0].length; i++) 
+    for (int i = 0; i < getColumnCount(); i++) 
       if (matrix[m][i] != matrix[n][i]) return false;
     return true; 
   }
@@ -301,13 +303,14 @@ public class Matrix implements MatrixOps
   /**
    * Returns a matrix whose every entry is the negative of the entry of the original.
    * 
-   * @return double[][]
+   * @return Matrix the negative of the original matrix
    */
-  public double[][] negMatrix() {
-    double[][] temp = matrix.clone();
-    for(int i = 0; i < matrix.length; i++) {
-      for(int j = 0; j < matrix[0].length; j++) {
-        temp[i][j] = -matrix[i][j];
+  public Matrix negMatrix() {
+    Matrix temp = new Matrix(getRowCount(), getColumnCount());
+    for(int i = 0; i < getRowCount(); i++) {
+      for(int j = 0; j < getColumnCount(); j++) {
+        if(temp.matrix[i][j] != 0) temp.matrix[i][j] = -matrix[i][j];
+        else temp.matrix[i][j] = 0;
       }
     }
     return temp;
@@ -319,14 +322,14 @@ public class Matrix implements MatrixOps
    * @return boolean if matrices are equal
    */
   public boolean equals(Matrix m) {
-    for(int i = 0; i < matrix.length; i++) {
-      for(int j = 0; j < matrix[0].length; j++) {
-        if(matrix[i][j] != m.getMatrix()[i][j]) return false;
+    for(int i = 0; i < getRowCount(); i++) {
+      for(int j = 0; j < getColumnCount(); j++) {
+        if(matrix[i][j] != m.matrix[i][j]) return false;
       }
     }
     return true;
   }
-   
+  
   /**
    * Returns a string repesenation of the Matrix object
    * 
@@ -334,8 +337,8 @@ public class Matrix implements MatrixOps
    */
   public String toString() {
     String s = "";
-    for(int i = 0; i < matrix.length; i++) {
-      for(int j = 0; j < matrix[0].length; j++)
+    for(int i = 0; i < getRowCount(); i++) {
+      for(int j = 0; j < getColumnCount(); j++)
         s += matrix[i][j] + " "; 
       s += "<br>";
     }
@@ -344,54 +347,152 @@ public class Matrix implements MatrixOps
   
   // testing 
   public static void main(String[] args) {
-    Matrix m = new Matrix();
+    
+    // constructor, toString, and setEntry
+    Matrix m = new Matrix(2,3);
+    System.out.println("Matrix m:\n" + m);
+    m.setEntry(0,0,4);
+    m.setEntry(0,1,12);
+    m.setEntry(0,2,5);
+    m.setEntry(1,0,15);
+    m.setEntry(1,1,7);
+    m.setEntry(1,2,29);
+    System.out.println("After entries have been set:\n" + m);
+    
+    // clone
+    Matrix clone = m.clone();
+    System.out.println("Clone of matrix m:\n" + clone);
+    
+    // getEntry
+    System.out.println("Get entry of (1,1): " + m.getEntry(1,1));
+    System.out.println("Get entry of (0,2): " + m.getEntry(0,2));
+    
+    // getRowCount, getColumnCount
+    System.out.println("Row count of m:" + m.getRowCount());
+    System.out.println("Column count of m: " + m.getColumnCount());
+    
+    Matrix n = new Matrix();
+    System.out.println("Row count of n:" + n.getRowCount());
+    System.out.println("Column count of n: " + n.getColumnCount());
+    
+    // getMatrix
+    System.out.println("getMatrix() for m:\n" + m.getMatrix());
+    System.out.println("getMatrix() for n:\n" + n.getMatrix());
+    
+    // transpose
+    System.out.println("Transpose of matrix m:\n" + m.transpose());
+    System.out.println("Transpose of matrix m transpose:\n"+  m.transpose());
+    System.out.println("Transpose of matrix n:\n" + n.transpose());
+    
+    // removeRow
+    clone.removeRow(3);
+    System.out.println(clone);
+    clone.removeRow(1);
+    System.out.println(clone);
+    
+    Matrix p = new Matrix(1,1);
+    System.out.println("Matrix p:\n" + p);
+    p.removeRow(0);
+    System.out.println("Now removing row 0:\n" + p);
+    // p.removeRow(0);
+    // System.out.println(p);
+    
+    // removeColumn
+    //clone.removeColumn(0);
+    //System.out.println(clone);
+    
+    p.removeColumn(0);
+    System.out.println("Now removing column 0:\n" + p);
+    
+    // swapRows
     System.out.println(m);
-    for(int i = 0; i < m.matrix.length; i++) {
-      for(int j = 0; j < m.matrix[0].length; j++) {
-        m.matrix[i][j] = 5; 
-      }
-    }
-//    Matrix m1 = new Matrix(3,3);
-//    System.out.println(m1);
-//    m1.setEntry(1,1,1);
-//    m1.setEntry(1,2,5);
-//    System.out.println(m1);
-//    System.out.println(m1.getEntry(1,1));
-//    
-//    m1.swapRows(0,1);
-//    System.out.println(m1);
-//    
-//    m1.removeRow(0);
-//    System.out.println(m1);
+    m.swapRows(0,1);
+    System.out.println("Now swapping rows 0 and 1:\n" + m);
+    //m.swapRows(1,3);
+    //System.out.println(m);
     
+    // scaleRow
+    m.scaleRow(1, 5);
+    System.out.println("Now scaling row 1 by 5:\n" + m);
+    //m.scaleRow(1, 0);
+    //System.out.println(m);
+    
+    // multiplyAndAdd
+    m.multiplyAndAdd(0,1,12);
+    System.out.println("Now multiplying row 0 by 12 and subtracting it from row 12\n"+ m);
+    //m.multiplyAndAdd(0,3,2);
+    //System.out.println(m);
+    //m.multiplyAndAdd(0,1,0);
+    //System.out.println(m);
+    
+    // isRowZeroes
+    System.out.println("Is column zeroes? (false)" + m.isRowZeroes(1));
+    //System.out.println(m.isRowZeroes(5));
+    
+    Matrix q = new Matrix(3,3);
+    System.out.println("Matrix q\n" + q);
+    System.out.println(q.isRowZeroes(2));
+    
+    // removeRowZeroes
+    // m.removeRowZeroes();
+    // System.out.println(m);
+    
+    q.removeRowZeroes();
+    System.out.println("Now removing row zeroes\n" + q);
+    
+    // isColumnZeroes
+    System.out.println("Is column zeroes? (false)" + m.isColumnZeroes(2));
+    // System.out.println(m.isColumnZeroes(3));
+    
+    q = new Matrix(3,3);
+    System.out.println("Is column zeroes? (true)" + q.isColumnZeroes(0));
+    
+    // getHighest
+    System.out.println("Index of highest element of column 0: (0) " + m.getHighest(0));
+    System.out.println("Index of highest element of column 2: (2) " + m.getHighest(2));
+    // System.out.println(m.getHighest(5));
+    
+    // getNonZero
+    System.out.println("First nonzero element of row 1: (0) " + m.getNonZero(1));
+    // System.out.println(m.getNonZero(3));
+    
+    // removeDuplicates
+    System.out.println("Now removing duplicate rows:");
+    m.removeDuplicateRows();
     System.out.println(m);
-    m.multiplyAndAdd(0,1,2);
-    System.out.println(m);
-    System.out.println(m.clone());
     
-    Matrix fourth = new Matrix(2,3);
-    fourth.setEntry(0,0,4);
-    fourth.setEntry(0,1,12);
-    //fourth.setEntry(0,2,5);
-    fourth.setEntry(1,1,7);
-    //fourth.setEntry(1,2,29);
-    fourth.setEntry(2,0,3);
-    fourth.setEntry(2,1,9);
-  
+    q.setEntry(0,0,4);
+    q.setEntry(0,2,12);
+    q.setEntry(2,0,20);
+    q.setEntry(2,2,60);
+    System.out.println(q);
+    q.removeDuplicateRows();
+    System.out.println(q);
     
-    fourth.multiplyAndAdd(0,2,(4/3));
-    fourth.removeDuplicateRows();
-    System.out.println(fourth);
-     System.out.println(fourth.getHighest(0));
+    // rowEquals
+    System.out.println("Does row 0 equal row 1? (false) " + m.rowEquals(0,1));
     
-    Matrix fifth = new Matrix(2,2);
-    fifth.setEntry(0,0,1);
-    fifth.setEntry(0,1,1);
-    fifth.setEntry(1,0,1);
-    fifth.setEntry(1,1,1);
-    fifth.multiplyAndAdd(1,0,2);
-    System.out.println(fifth);
-   
+    q.setEntry(2,0,1);
+    q.setEntry(2,2,3);
+    System.out.println("Does row 0 equal row 2? (true) " + q.rowEquals(0,2));
+    
+    // negMatrix
+    System.out.println("Matrix m negated:\n" + m.negMatrix());
+    
+    System.out.println("Matrix a negated:\n" +q.negMatrix());
+    
+    Matrix r = new Matrix(5,5);
+    System.out.println("Matrix r\n" + r);
+    System.out.println(r.negMatrix());
+    
+    // equals
+    System.out.println(m.equals(q));
+    
+    Matrix s = new Matrix(5,5);
+    System.out.println("Matrix s\n" + s);
+    System.out.println("Does matrix s = matrix r? (true) " + r.equals(s));
+    s.setEntry(4,4,12);
+    System.out.println("Does matrix s = matrix r? (false) " + s.equals(r));
     
   }
   

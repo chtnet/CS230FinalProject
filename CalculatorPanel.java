@@ -1,17 +1,16 @@
-import java.awt.*;
-import javax.swing.*;
-import java.awt.event.*;
-import java.util.*;
-import java.io.*;
-
-
-
 /**
  * Calculator panel. Allows user to input values for a matrix or to import a text file with comma-separated values.
  * Displays calculations performed in MatrixCalculator in GUI.
  * 
  * @author Sravanti Tekumalla
  */
+
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
+import java.util.*;
+import java.io.*;
+
 
 public class CalculatorPanel extends JPanel
 {
@@ -24,14 +23,14 @@ public class CalculatorPanel extends JPanel
   private SpecialMatrix sm;
   private TermsPanel tp;
   private JTextField[][] textFields;
-
+  
   
   /** 
    * Class constructor.
    */
   public CalculatorPanel(TermsPanel tp)
   {
-   
+    
     this.tp = tp;
     //sets up layout
     setLayout (new BorderLayout());
@@ -50,13 +49,13 @@ public class CalculatorPanel extends JPanel
     items [4] = "4";
     items [5] = "5";
     
-      String[] items2 = new String[6];
-      items2[0] = "---";
-      items2[1] = "Row Echelon Form";
-      items2[2] = "Row-reduced Echelon Form";
-      items2[3] = "Column-Reduced Echelon Form";
-      items2[4] = "Inverse";
-      items2[5] = "Determinant";
+    String[] items2 = new String[6];
+    items2[0] = "---";
+    items2[1] = "Row Echelon Form";
+    items2[2] = "Row-reduced Echelon Form";
+    items2[3] = "Column-Reduced Echelon Form";
+    items2[4] = "Inverse";
+    items2[5] = "Determinant";
     
     dimension = new JComboBox (items);  
     //n = new JComboBox (items);
@@ -93,8 +92,8 @@ public class CalculatorPanel extends JPanel
     settingsPanel.add(new JLabel("<html><p style ='font-family:Marker felt;color:#0066FF;font-size:13px;align:left'>Dimension of matrix:</p></html>"));
     settingsPanel.add(dimension);
     settingsPanel.add(new JLabel("<html><p style ='font-family:Marker felt;color:#0066FF;font-size:13px;align:left'>Calculation</p></html>"));
-     settingsPanel.add(calculation);
-     settingsPanel.add(importMatrix);
+    settingsPanel.add(calculation);
+    settingsPanel.add(importMatrix);
     //add top label
     add (new JLabel("<html><h2 style ='font-family:Marker felt;color:#B20000;font-size:20px;align:center;text-decoration:underline;opacity:0.4'>"
                       + "Enter the dimensions and values for your matrix below. Alternatively, import a matrix.</h2></html>"), BorderLayout.NORTH);
@@ -112,7 +111,7 @@ public class CalculatorPanel extends JPanel
     add (matrixPanel, BorderLayout.CENTER);
     add (settingsPanel, BorderLayout.WEST);
     add (southPanel, BorderLayout.SOUTH);
- 
+    
   }
   
   
@@ -123,7 +122,7 @@ public class CalculatorPanel extends JPanel
    */ 
   
   public MatrixCalculator getMC() {
-   return mc; 
+    return mc; 
   }
   /**
    * Helper method to create a panel of the matrix displayed in a clean grid format. Used for center portion of CalculatorPanel.
@@ -141,7 +140,7 @@ public class CalculatorPanel extends JPanel
   }
   
   
-    /**
+  /**
    * Helper method to read in imported matrix and create a matrix based on imported values. 
    * Values must be 
    * Then proceeds to get information from user about what calculation needs to be performed.
@@ -154,7 +153,7 @@ public class CalculatorPanel extends JPanel
       
       //creates reader to read in imported file
       Scanner reader = new Scanner(new File(textfile));
-     
+      
       //finds dimensions of matrix
       fileDimensions(textfile);
       
@@ -176,7 +175,7 @@ public class CalculatorPanel extends JPanel
       items2[4] = "Inverse";
       items2[5] = "Determinant";
       String picked = (String)JOptionPane.showInputDialog(this, "Pick which Calculation:","Choose calculation",JOptionPane.QUESTION_MESSAGE ,null,items2,items2[0]);
-    
+      
       //perform calculation based on chosen value by user
       calculate(picked);
       
@@ -186,7 +185,7 @@ public class CalculatorPanel extends JPanel
     }  
   }
   
-    /**
+  /**
    * Helper method to find dimensions of imported matrix.
    * 
    * @throws FileNotFoundException
@@ -207,7 +206,7 @@ public class CalculatorPanel extends JPanel
     
   }
   
-    /**
+  /**
    * Helper method to clear matrix calculator data and clear GUI.
    * 
    */ 
@@ -223,7 +222,7 @@ public class CalculatorPanel extends JPanel
     
   }
   
-   /**
+  /**
    * Helper method to calculate information about matrix based on user input.
    * 
    * @throws NumberFormatException
@@ -246,12 +245,12 @@ public class CalculatorPanel extends JPanel
               clear(); return;
             }
           }
-    
+          
         }
         
         //updates terms panel according to matrix entered
-        sm = new SpecialMatrix(mc.getMatrix());
-        tp.setProperties(sm.getProperties());
+//        sm = new SpecialMatrix(mc.getMatrix());
+//        tp.setProperties(sm.getProperties());
       }
       
       //clears matrix in GUI to populate with calculation result
@@ -292,9 +291,9 @@ public class CalculatorPanel extends JPanel
   
   
   /**
- * Implements Listeners for buttons for GUI.
- *
- */
+   * Implements Listeners for buttons for GUI.
+   *
+   */
   private class ButtonListener implements ActionListener {
     
     public void actionPerformed (ActionEvent event) {
@@ -332,11 +331,11 @@ public class CalculatorPanel extends JPanel
   }
   
   /**
- * Implements Listeners for combo boxes for GUI.
- * Note: Does not use ButtonListener because only ItemListener has 
- * ability to see if item selected is different from before
- *
- */
+   * Implements Listeners for combo boxes for GUI.
+   * Note: Does not use ButtonListener because only ItemListener has 
+   * ability to see if item selected is different from before
+   *
+   */
   
   private class ItemChangeListener implements ItemListener{
     public void itemStateChanged(ItemEvent event) {

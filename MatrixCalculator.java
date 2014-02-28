@@ -1,3 +1,13 @@
+/**
+ * This is a representation of the Matrix Calculator object and includes all operations performed on a matrix
+ * This includes the operations to find the determinant, inverse, REF, RREF, and CREF forms of a matrix.
+ * Ideas from the pseudocode at http://rosettacode.org/wiki/Reduced_row_echelon_form were used, but not the
+ * java code on the website.
+ * 
+ * @author Sravanti Tekumalla
+ * @author Su Lin Blodgett
+ */
+
 import java.util.*;
 
 public class MatrixCalculator {
@@ -11,7 +21,7 @@ public class MatrixCalculator {
    */
   public MatrixCalculator(int m, int n)
   {
-    matrix = new Matrix(m,n); 
+    matrix = new Matrix(m, n); 
     steps = new LinkedList<String>();
   } 
   
@@ -38,7 +48,7 @@ public class MatrixCalculator {
    * @return LinkedList of steps
    */
   public LinkedList<String> getSteps() {
-   return steps; 
+    return steps; 
   }
   
   /** 
@@ -92,40 +102,39 @@ public class MatrixCalculator {
   public double determinant(double[][] matrix){ //method sig. takes a matrix (two dimensional array), returns determinant.
     int sum=0; 
     int s;
-    if(matrix.length == matrix[0].length) {
-      if(matrix.length==1){  //base case - size 1 matrix determinant is itself.
+    if(getRowCount() == getColumnCount()) {
+      if(getRowCount() == 1){  //base case - size 1 matrix determinant is itself.
         return(matrix[0][0]);
       }
-      for(int i=0;i<matrix.length;i++){ //finds determinant using row-by-row expansion
-        double[][]smaller= new double[matrix.length-1][matrix.length-1]; //creates smaller matrix- values not in same row, column
-        for(int a=1;a<matrix.length;a++){
-          for(int b=0;b<matrix.length;b++){
-            if(b<i){
+      for(int i=0; i < getRowCount(); i++){ //finds determinant using row-by-row expansion
+        double[][] smaller= new double[getRowCount()-1][getRowCount()-1]; //creates smaller matrix- values not in same row, column
+        for(int a=1; a < getRowCount();a++){
+          for(int b=0; b < getColumnCount(); b++){
+            if(b < i){
               smaller[a-1][b]=matrix[a][b];
             }
-            else if(b>i){
+            else if(b > i){
               smaller[a-1][b-1]=matrix[a][b];
             }
           }
           steps.add("Minor matrix of row 1, column " + (i+1) + "<br>");
-           steps.add(new Matrix(smaller).toString());
+          steps.add(new Matrix(smaller).toString());
         }
         
-       
+        
         if(i%2==0){ //sign changes based on i
-          s=1;
+          s = 1;
         }
         else{
-          s=-1;
+          s = -1;
         }
-        sum+=s*matrix[0][i]*(determinant(smaller)); steps.add("Current sum: " + sum); //recursive step: determinant of larger determined by smaller.
+        sum += s*matrix[0][i]*(determinant(smaller)); 
+        steps.add("Current sum: " + sum); //recursive step: determinant of larger determined by smaller.
       }
     }
     steps.add("Determinant: " + sum);
     return(sum); //returns determinant value. once stack is finished, returns final determinant.
   }
-  
-  
   
   /**
    * Creates a submatrix of a given matrix that excludes the mth row and nth column.
@@ -135,17 +144,16 @@ public class MatrixCalculator {
    * @return Matrix  smaller resulting matrix
    */
   private Matrix minorMatrix(int m, int n) //creates submatrix excluding mth row and nth column
-  {
-    
+  { 
     double[][] temp = matrix.getMatrix();
     Matrix minor = new Matrix(temp.length - 1, temp[0].length - 1);
     int r = -1; //keeps track of minor lengths, adjusts by shifting rows
     for(int j = 0; j < temp.length; j++) {
-      if( j != m) {
-        r ++;
+      if(j != m) {
+        r++;
         int c = -1;
         for(int k = 0; k < temp.length; k++) {
-          if (k != n) { 
+          if(k != n) { 
             c++;
             minor.setEntry(r, c, temp[j][k]);
           }
@@ -164,6 +172,7 @@ public class MatrixCalculator {
   private double cofactor(int m, int n) {
     Matrix minor = minorMatrix(m, n);
     double cofactor = determinant(minor.getMatrix());
+    System.out.println("cofactor "+ cofactor);
     if((m+n) %2 == 1) cofactor = - cofactor;
     return cofactor;
     
@@ -171,7 +180,7 @@ public class MatrixCalculator {
   
   /**
    * Calculates and returns the transpose of the cofactor matrix (the matrix of the cofactors 
-   * of a given matrix.
+   * of a given matrix).
    * 
    * @return Matrix  the calculated adjoint matrix
    */
@@ -189,8 +198,6 @@ public class MatrixCalculator {
   
   /**
    * Calculates and returns the inverse of the associated matrix.
-   * The inverse is calculated by calculating the adjoint matrix 
-   * and dividing that matrix by the determinant. 
    * 
    * @return Matrix  the inverse of the matrix
    */
@@ -198,6 +205,7 @@ public class MatrixCalculator {
     Matrix inverse = adjoint();
     if(inverse.getMatrix().length == inverse.getMatrix()[0].length) {
       double det = determinant(getMatrix().getMatrix());
+      System.out.println(det);
       steps.clear();
       steps.add("Adjoint:<br>"+ inverse.transpose().toString());
       steps.add("Determinant: " + det +"<br> The inverse is equal to the adjoint matrix times the determinant.");
@@ -217,7 +225,6 @@ public class MatrixCalculator {
    */
   public Matrix REF()
   {
-    
     Matrix temp = matrix.clone();
     for(int i = 0; i < temp.getMatrix()[0].length; i++) {
       if(!temp.isColumnZeroes(i)) { // ensures column is not all zeroes
@@ -228,6 +235,7 @@ public class MatrixCalculator {
         temp.scaleRow(i, temp.getMatrix()[i][index]); // scales the ith row by value of first element 
       }
     }
+    System.out.println(temp);
     temp.removeDuplicateRows();
     temp.removeRowZeroes();
     return temp;  
@@ -240,8 +248,7 @@ public class MatrixCalculator {
    */
   private void scaleAll(int m) {
     for(int i = 0; i < matrix.getRowCount(); i++) {
-      steps.add("Multiply row " + (i+1) + " by " + matrix.getMatrix()[m][i] + " and subtract from row " + (m+1) + "<br>");
-      steps.add(matrix.toString() + "<br>");
+      steps.add("Multiply row " + (i+1) + "by " + matrix.getMatrix()[m][i] + " and subtract from row " + (m+1));
       matrix.multiplyAndAdd(m, i, matrix.getMatrix()[m][i]);
     } 
   }
@@ -254,7 +261,7 @@ public class MatrixCalculator {
   public Matrix RREF()
   {
     Matrix temp = REF();
-    for(int i = 0; i < temp.getMatrix().length; i++) {
+    for(int i = 0; i < temp.getRowCount(); i++) {
       scaleAll(i);
     }
     System.out.println("RREF\n" + temp);
@@ -279,7 +286,7 @@ public class MatrixCalculator {
   }
   
   /**
-   * Returns a string repesenation of the MatrixCalculator object
+   * Returns a string repesentation of the MatrixCalculator object
    * 
    * @return String  string representation of MatrixCalculator object
    */
@@ -288,53 +295,36 @@ public class MatrixCalculator {
     
   }
   public static void main(String[] args) {
-//    MatrixCalculator mc = new MatrixCalculator(1,1);
-//    System.out.println("ORIGINAL MATRIX\n" + mc.matrix);
-//    mc.matrix.setEntry(0,0,3);
-//
-//    System.out.println(mc.determinant(mc.matrix));
-//    
-//    MatrixCalculator second = new MatrixCalculator(2,2);
-//    second.matrix.setEntry(0,0,4);
-//    second.matrix.setEntry(0,1,12);
-//    second.matrix.setEntry(1,1,13);
-//    
-//    System.out.println(second.determinant(second.matrix));
-//    
-//    MatrixCalculator third = new MatrixCalculator(2,1);
-//    System.out.println(third.REF(third.matrix));
-    //System.out.println(third.determinant(third.matrix));
     
-    MatrixCalculator fourth = new MatrixCalculator(3,3);
-    fourth.matrix.setEntry(0,0,4);
-    fourth.matrix.setEntry(0,1,12);
-    fourth.matrix.setEntry(0,2,5);
-    fourth.matrix.setEntry(1,1,7);  
-    fourth.matrix.setEntry(1,2,29);
-    fourth.matrix.setEntry(2,0,3);
-    fourth.matrix.setEntry(2,1,9);
-    fourth.matrix.setEntry(2,2,15.0/4.0);
-    System.out.println("The fourth matrix:\n" + fourth.matrix);
-    System.out.println("Inverse: " + fourth.inverse());
-    Matrix matrix = fourth.RREF();
+    // constructor and toString
+    MatrixCalculator m = new MatrixCalculator(3,3);
+    m.matrix.setEntry(0,0,4);
+    m.matrix.setEntry(0,1,12);
+    m.matrix.setEntry(0,2,5);
+    m.matrix.setEntry(1,1,7);  
+    m.matrix.setEntry(1,2,29);
+    m.matrix.setEntry(2,0,3);
+    m.matrix.setEntry(2,1,9);
+    m.matrix.setEntry(2,2,15.0/4.0);
+    System.out.println("The matrix:\n" + m);
     
+    // inverse
+    System.out.println("Inverse:\n" + m.inverse());
     
+    // REF
+    Matrix matrix = m.REF();
+    System.out.println("REF:\n" + matrix);
     
-    MatrixCalculator five = new MatrixCalculator(3,3);
+    // RREF
+    matrix = m.RREF();
+    System.out.println("RREF:\n" + matrix);
     
-    five.matrix.setEntry(0,0, 1);
-    five.matrix.setEntry(0,1,1);
-    five.matrix.setEntry(1,0, 3);
-    five.matrix.setEntry(1,1,4);
-    System.out.println(five.matrix);
-    System.out.println("det " + five.determinant(five.matrix.getMatrix()));
+    // CREF
+    matrix = m.CREF();
+    System.out.println("CREF:\n" + matrix);
     
-    
-    MatrixCalculator six = new MatrixCalculator(1,1);
-    six.matrix.setEntry(0,0,4);
-    System.out.println("det " + six.determinant(six.matrix.getMatrix()));
-    
-    
+    // determinant
+    System.out.println("Determinant: " + m.determinant(m.getMatrix().getMatrix()));
     
   } 
   

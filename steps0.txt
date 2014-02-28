@@ -1,33 +1,36 @@
 <html><p style ='font-family:Marker felt;font-size:16px;text-decoration:underline'>Original matrix:</p>
-NaN NaN NaN <br>NaN NaN NaN <br>NaN NaN NaN <br>
+1.0 2.0 3.0 
+4.0 5.0 6.0 
+7.0 8.0 10.0 
+
 <html><p style ='font-family:Marker felt;font-size:16px;text-decoration:underline'>Steps:</p>
 Swap rows 1 and 3
-1.0 2.0 3.0 <br>4.0 5.0 6.0 <br>7.0 8.0 10.0 <br>
+1.0 2.0 3.0 
+4.0 5.0 6.0 
+7.0 8.0 10.0 
+
 Scale row 1 by 7.0
-7.0 8.0 10.0 <br>4.0 5.0 6.0 <br>1.0 2.0 3.0 <br>
+7.0 8.0 10.0 
+4.0 5.0 6.0 
+1.0 2.0 3.0 
+
 Swap rows 2 and 2
-1.0 1.1428571428571428 1.4285714285714286 <br>4.0 5.0 6.0 <br>1.0 2.0 3.0 <br>
+1.0 1.1428571428571428 1.4285714285714286 
+4.0 5.0 6.0 
+1.0 2.0 3.0 
+
 Scale row 2 by 4.0
-1.0 1.1428571428571428 1.4285714285714286 <br>4.0 5.0 6.0 <br>1.0 2.0 3.0 <br>
+1.0 1.1428571428571428 1.4285714285714286 
+4.0 5.0 6.0 
+1.0 2.0 3.0 
+
 Swap rows 3 and 3
-1.0 1.1428571428571428 1.4285714285714286 <br>1.0 1.25 1.5 <br>1.0 2.0 3.0 <br>
+1.0 1.1428571428571428 1.4285714285714286 
+1.0 1.25 1.5 
+1.0 2.0 3.0 
+
 Scale row 3 by 1.0
-1.0 1.1428571428571428 1.4285714285714286 <br>1.0 1.25 1.5 <br>1.0 2.0 3.0 <br>
-Multiply row 1 by 1.0 and subtract from row 1<br>
-1.0 2.0 3.0 <br>4.0 5.0 6.0 <br>7.0 8.0 10.0 <br><br>
-Multiply row 2 by 0.0 and subtract from row 1<br>
-0.0 0.0 0.0 <br>4.0 5.0 6.0 <br>7.0 8.0 10.0 <br><br>
-Multiply row 3 by 0.0 and subtract from row 1<br>
-0.0 0.0 0.0 <br>NaN NaN NaN <br>7.0 8.0 10.0 <br><br>
-Multiply row 1 by NaN and subtract from row 2<br>
-0.0 0.0 0.0 <br>NaN NaN NaN <br>NaN NaN NaN <br><br>
-Multiply row 2 by NaN and subtract from row 2<br>
-NaN NaN NaN <br>NaN NaN NaN <br>NaN NaN NaN <br><br>
-Multiply row 3 by NaN and subtract from row 2<br>
-NaN NaN NaN <br>NaN NaN NaN <br>NaN NaN NaN <br><br>
-Multiply row 1 by NaN and subtract from row 3<br>
-NaN NaN NaN <br>NaN NaN NaN <br>NaN NaN NaN <br><br>
-Multiply row 2 by NaN and subtract from row 3<br>
-NaN NaN NaN <br>NaN NaN NaN <br>NaN NaN NaN <br><br>
-Multiply row 3 by NaN and subtract from row 3<br>
-NaN NaN NaN <br>NaN NaN NaN <br>NaN NaN NaN <br><br>
+1.0 1.1428571428571428 1.4285714285714286 
+1.0 1.25 1.5 
+1.0 2.0 3.0 
+
