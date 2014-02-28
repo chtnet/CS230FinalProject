@@ -22,13 +22,15 @@ On the second panel the user may choose either to import a matrix or to manually
 
 The user can choose to import a matrix of up to 5x5 size. Here, a 3x3 matrix is being populated manually with the calculation Row Echelon Form selected.
 
-The user can then choose the operation they wish to perform on the matrix;
+The user can then choose the operation they wish to perform on the matrix:<ul>
 
-Row EF - row echelon form of the matrix
-Row-Reduced EF - reduced row echelon form of the matrix
-Column-Reduced EF - column reduced echelon form of the matrix
-Inverse - inverse of the matrix
-Determinant - determinant of the matrix
+<li>Row EF - row echelon form of the matrix
+</li><li>Row-Reduced EF - reduced row echelon form of the matrix
+</li><li>Column-Reduced EF - column reduced echelon form of the matrix
+</li><li>Inverse - inverse of the matrix
+</li><li>Determinant - determinant of the matrix
+</li></ul>
+
 
 The panel will then display the calculation. The panel will display an error message if the calculation cannot be performed (e.g. trying to take the determinant of a non-square matrix).
 
@@ -47,21 +49,22 @@ On the third panel the properties associated with the matrix will be displayed, 
 </li><li><b>Two-Dimensional Array:</b> Lastly, we used a 2D array to implement the matrix itself and perform the operations such as finding the inverse, determinant, etc. This seemed to be an obvious choice because a 2D array corresponds directly to a matrix.
 </li></ul>
 
-<h3>Important Classes: </h3>
-Matrix.java - This class will create a matrix based on specified dimensions. Implements the interface MatrixOps.
-MatrixOps.java - This class is an interface which includes operations typically performed on a matrix, such as finding the transpose, negating the matrix and finding the first non-zero element in a row or column. 
-MatrixCalculator.java - This class calculates determinants, inverses, row-reduced, column-reduced and row-reduced echelon form calculations on a Matrix. 
-SpecialMatrix.java - This class implements a binary search decision tree to determine if a matrix is a special kind of matrix, such as diagonal, triangular or symmetric. 
-MatrixCalculatorGUI.java - This class implements a multi-tabbed pane interface for MatrixCalculator.java. 
+<h3>Important Classes: </h3><ul>
+<li>Matrix.java - This class will create a matrix based on specified dimensions. Implements the interface MatrixOps.
+</li><li>MatrixOps.java - This class is an interface which includes operations typically performed on a matrix, such as finding the transpose, negating the matrix and finding the first non-zero element in a row or column. 
+</li><li>MatrixCalculator.java - This class calculates determinants, inverses, row-reduced, column-reduced and row-reduced echelon form calculations on a Matrix. 
+</li><li>SpecialMatrix.java - This class implements a binary search decision tree to determine if a matrix is a special kind of matrix, such as diagonal, triangular or symmetric. 
+</li><li>MatrixCalculatorGUI.java - This class implements a multi-tabbed pane interface for MatrixCalculator.java. 
 
 
-Bugs and Future Improvements: 
-Determinant method: The determinant method does not currently take in the proper parameters. We originally wrote a recursive method which took in a Matrix object and calculated the determinant using the expansion by minors method. However, we kept receiving a stack overflow error due to the recursion not working properly, particularly with our getMatrix() method. We left in this method in the comments to show our thought process but implemented an alternative determinant method which takes in a double array (which is what a Matrix object consists of) instead of the  Matrix object itself. We also had to use a different algorithm to obtain the minor matrices instead of calling our minorMatrix() method. 
-Row-Reduced Echelon Form: Currently, our RREF() method is broken, likely due to our scaling method. It worked in previous iterations, but currently returns a similar result to our REF() method. . As a result, CREF() is also broken because it relies on RREF().
-Scrollbar on steps panel: We attempted to implement a scrollbar for the steps panel for calculations that took many steps. However, this did not show up in the panel. The code remains in CalculatorPanel.java. 
-Future improvements: Nonsquare matrices: Currently, Matrix Calculator only takes in matrices with square dimensions. While most calculations beginners will try to do are for square matrices, it can be limiting. Implementing our calculations for nonsquare matrices requires a more complex algorithm that would be nice to implement in the future. 
+<h3>Bugs and Future Improvements:</h3><ul>
+<li>Determinant method: The determinant method does not currently take in the proper parameters. We originally wrote a recursive method which took in a Matrix object and calculated the determinant using the expansion by minors method. However, we kept receiving a stack overflow error due to the recursion not working properly, particularly with our getMatrix() method. We left in this method in the comments to show our thought process but implemented an alternative determinant method which takes in a double array (which is what a Matrix object consists of) instead of the  Matrix object itself. We also had to use a different algorithm to obtain the minor matrices instead of calling our minorMatrix() method. 
+</li><li>Row-Reduced Echelon Form: Currently, our RREF() method is broken, likely due to our scaling method. It worked in previous iterations, but currently returns a similar result to our REF() method. . As a result, CREF() is also broken because it relies on RREF().
+</li><li>scrollbar on steps panel: We attempted to implement a scrollbar for the steps panel for calculations that took many steps. However, this did not show up in the panel. The code remains in CalculatorPanel.java. 
+<li><li>Future improvements:Nonsquare matrices: Currently, Matrix Calculator only takes in matrices with square dimensions. While most calculations beginners will try to do are for square matrices, it can be limiting. Implementing our calculations for nonsquare matrices requires a more complex algorithm that would be nice to implement in the future. 
+</li></ul>
 
-Division of Labor:
+<h3>Division of Labor:</h3>
 Sravanti Tekumalla and Su Lin Blodgett worked on the algorithms for MatrixCalculator.java and implemented MatrixOps in Matrix.java together. Su Lin implemented SpecialMatrix.java while Sravanti implemented the Graphical User Interface (GUI). A more specific breakdown:
 
 Matrix.java - Sravanti and Su Lin
