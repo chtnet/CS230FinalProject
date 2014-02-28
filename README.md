@@ -55,7 +55,7 @@ On the third panel the properties associated with the matrix will be displayed, 
 </li><li>MatrixCalculator.java - This class calculates determinants, inverses, row-reduced, column-reduced and row-reduced echelon form calculations on a Matrix. 
 </li><li>SpecialMatrix.java - This class implements a binary search decision tree to determine if a matrix is a special kind of matrix, such as diagonal, triangular or symmetric. 
 </li><li>MatrixCalculatorGUI.java - This class implements a multi-tabbed pane interface for MatrixCalculator.java. 
-
+</ul>
 
 <h3>Bugs and Future Improvements:</h3><ul>
 <li>Determinant method: The determinant method does not currently take in the proper parameters. We originally wrote a recursive method which took in a Matrix object and calculated the determinant using the expansion by minors method. However, we kept receiving a stack overflow error due to the recursion not working properly, particularly with our getMatrix() method. We left in this method in the comments to show our thought process but implemented an alternative determinant method which takes in a double array (which is what a Matrix object consists of) instead of the  Matrix object itself. We also had to use a different algorithm to obtain the minor matrices instead of calling our minorMatrix() method. 
